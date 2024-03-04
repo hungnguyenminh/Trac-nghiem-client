@@ -1,0 +1,1 @@
+export {ExamDone as default} from "@/modules/exam_done"

@@ -1,0 +1,173 @@
+"use client"
+import React, {useState} from "react";
+import {usePathname, useRouter} from "next/navigation";
+import {Avatar, Dropdown, Select} from "antd";
+import type {MenuProps} from 'antd';
+import {
+    BellFilled,
+    CloseOutlined,
+    MenuOutlined,
+    SearchOutlined
+} from "@ant-design/icons";
+import {listRoutes} from "@/routes/listRoutes";
+import Link from "next/link";
+import Footer from "@/components/Layout/Footer";
+
+const items: MenuProps['items'] = [
+    {
+        key: '1',
+        label: (
+            <Link href={"/profile/info"}>
+                <span>
+                    Trang cá nhân
+                </span>
+            </Link>
+        ),
+    },
+    {
+        key: '2',
+        label: (
+            <Link href={"/profile/login"}>
+                <span>
+                    Đăng xuất
+                </span>
+            </Link>
+        ),
+    },
+];
+
+
+export default function MainLayout({children,}: Readonly<{ children: React.ReactNode; }>) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [isExtend, setIsExtend] = useState(true);
+    const [isHover, setIsHover] = useState(false);
+    const pathName = usePathname();
+
+    const openSidebar = () => {
+        setIsOpen(!isOpen);
+    }
+
+    const extendSidebar = (a: boolean) => {
+        setIsExtend(a);
+    }
+
+    const router = useRouter();
+
+    // @ts-ignore
+    return (
+        <main className="bg-gray-50 min-h-[100vh] w-full">
+            <nav className="fixed z-30 bg-white w-full border">
+                <div className={"flex justify-between"}>
+                    <div className="flex items-center py-3 px-3 lg:px-5 lg:pl-3">
+                        {
+                            isOpen ? (
+                                <button
+                                    className="p-2 mr-4 flex justify-center text-gray-600 rounded cursor-pointer lg:hidden hover:text-gray-900 hover:bg-gray-100"
+                                    onClick={openSidebar}><CloseOutlined className={"flex justify-center items-center w-6 h-6"}/></button>
+                            ) : (
+                                <button
+                                    className="p-2 mr-4 text-gray-600 rounded cursor-pointer lg:hidden hover:text-gray-900 hover:bg-gray-100"
+                                    onClick={openSidebar}><MenuOutlined className={"flex justify-center items-center w-6 h-6"}></MenuOutlined>
+                                </button>
+                            )
+                        }
+                        <button
+                            className="hidden lg:inline p-2 mr-4 text-gray-600 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100"
+                            onClick={() => {
+                                extendSidebar(!isExtend);
+                            }}><MenuOutlined className={"flex justify-center items-center text-xl w-6 h-6"}></MenuOutlined></button>
+                        <div className={`bg-blue-600 w-28 h-full flex justify-center items-center rounded-lg`}>
+                            <span>Logo</span></div>
+                        <form action="/search_result" method="GET" className="hidden lg:block lg:pl-8">
+                            <label htmlFor="topbar-search" className="sr-only">Search</label>
+                            <div className="relative lg:w-80">
+                                <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                                    <SearchOutlined className={"w-5 h-5 text-gray-500"}></SearchOutlined>
+                                </div>
+                                <input type="text" name="key" id="topbar-search"
+                                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-primary-50 focus:border-primary-300 block w-full pl-10 p-2.5"
+                                       placeholder="Search"/>
+                            </div>
+                        </form>
+                        <button className="p-2 ml-4 text-gray-600 cursor-pointer lg:hidden hover:text-gray-900"
+                                onClick={() => setIsExtend(true)}><SearchOutlined className={"w-5 h-5 text-gray-500"}></SearchOutlined></button>
+                    </div>
+                    <div className={"flex items-center pr-3 lg:pr-5"}>
+                        <Select
+                            className={"mr-4 hidden lg:inline-block"}
+                            defaultValue="vietnamese"
+                            style={{width: 120}}
+                            options={[
+                                {value: 'vietnamese', label: 'Tiếng Việt'},
+                                {value: 'english', label: 'English'},
+                            ]}
+                            size={"large"}
+                        />
+                        <Dropdown
+                            menu={{items}} placement="bottomRight" arrow
+                            dropdownRender={(menu) => (
+                                <div className={"bg-white border p-6 rounded "}>
+                                    <div className={"flex items-center"}>
+                                        <Avatar>U</Avatar>
+                                        <span className={"font-semibold ml-2"}>Nguyen Van A </span>
+                                    </div>
+                                </div>
+                            )}
+                        >
+                            <BellFilled className={"mr-4"}></BellFilled>
+                        </Dropdown>
+                        <Dropdown menu={{items}} placement="bottomRight" arrow>
+                            <Avatar>U</Avatar>
+                        </Dropdown>
+                    </div>
+                </div>
+
+            </nav>
+            <div className="flex pt-16 h-full">
+                <aside
+                    onMouseEnter={() => setIsHover(true)}
+                    onMouseLeave={() => setIsHover(false)}
+                    className={`flex fixed top-0 left-0 z-20 flex-col flex-shrink-0 bg-white border pt-16 w-64 h-full duration-200 lg:flex transition-width ${isOpen ? "" : "hidden"} ${isExtend || isHover ? "lg:w-64" : "lg:w-20"}`}>
+                    <div className={"flex flex-col flex-1 bg-gray-50 px-2 pt-6"}>
+                        <ul>
+                            <li>
+                                <form action="#" method="GET" className="lg:hidden">
+                                    <label htmlFor="mobile-search" className="sr-only">Search</label>
+                                    <div className="relative">
+                                        <div
+                                            className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                                            <SearchOutlined className={"w-5 h-5 text-gray-500"}></SearchOutlined>
+                                        </div>
+                                        <input type="text" name="email" id="mobile-search"
+                                               className="bg-gray-50 border border-gray-300 text-dark-500 text-sm font-light rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full pl-10 p-2.5 mb-2"
+                                               placeholder="Search"/>
+                                    </div>
+                                </form>
+                            </li>
+                            {listRoutes.map((item, index) => (
+                                <li className="" key={index}>
+                                    <Link href={item.path} onClick={openSidebar}>
+                                        <div className={`flex items-center py-2.5 px-4 text-dark-500 rounded-lg transition-all duration-200 ${pathName === item.path && (isExtend || isHover) ? "bg-white shadow-lg shadow-gray-200" : "hover:bg-gray-200"}`}>
+                                            <div
+                                                className={`flex items-center justify-center shadow-md shadow-gray-300 text-dark-700 w-8 h-8 p-2.5 mr-1 rounded-lg ${pathName === item.path ? "bg-blue-600 text-white" : ""}`}>
+                                                {item.icon}
+                                            </div>
+                                            <span className={`ml-3 text-dark-500 text-sm font-light transition-all duration-200 ${isExtend || isHover ? "" : "lg:hidden"}`}>{item.label}</span>
+                                        </div>
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </aside>
+                <div className={`fixed inset-0 z-10 bg-gray-900 opacity-50 lg:hidden ${isOpen ? "" : "hidden"}`}
+                     onClick={openSidebar}></div>
+                <div
+                    className={`content h-full w-full overflow-y-auto  ${isExtend || isHover ? "lg:ml-64" : "lg:ml-20"}`}>
+                    {children}
+                    <Footer></Footer>
+                </div>
+            </div>
+        </main>
+    );
+}

@@ -1,0 +1,1 @@
+export {SearchResult as default} from "@/modules/search_result"
