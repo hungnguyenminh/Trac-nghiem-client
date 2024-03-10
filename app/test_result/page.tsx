@@ -1,1 +1,0 @@
-export {TestResult as default} from "@/modules/test_result"

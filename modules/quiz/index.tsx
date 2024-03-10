@@ -1,90 +1,250 @@
-"use client"
-import React from "react";
-import {useRouter} from "next/navigation";
+'use client';
 
-const listQues = [
-  {},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},
-]
-export function Quiz() {
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { getDetailExam } from '@/api/ApiExam';
+import { useQuery } from 'react-query';
+import { Radio, RadioChangeEvent, Space } from 'antd';
+import { useBoolean } from '@/ultils/custom-hook';
+
+interface IProps {
+  idExam?: number;
+}
+
+export function Quiz(props: IProps) {
+  const { idExam } = props;
+
+  let idTimeout;
+
   const router = useRouter();
+  const [dataDetailExam, setDataDetailExam] = useState<any>();
+  const isStart = useBoolean(false);
+  const [statusExam, setStatusExam] = useState<'start' | 'doing' | 'finished'>(
+    'start'
+  );
+  const [timeCowndown, setTimecowndown] = useState<any>({
+    minute: '',
+    second: '',
+  });
+  const [listQuestionSubmit, setListQuestionSubmit] = useState<any>([
+    {
+      content: '',
+      is_correct: false,
+      is_selected: '',
+    },
+  ]);
+
+  const handleStatusExam = (): string => {
+    let text = '';
+    switch (statusExam) {
+      case 'start':
+        text = 'Bắt đầu bài thi';
+        break;
+      case 'doing':
+        text = 'Nộp bài thi';
+        break;
+      case 'finished':
+        text = 'Hoàn thành';
+        break;
+      default:
+        text = '';
+    }
+
+    return text;
+  };
+
+  const onChangeSelectAnswer = (e: RadioChangeEvent, itemQuestion: any) => {
+    const newListQuestionSubmit = listQuestionSubmit.map((item: any) => {
+      if (item?.id_question === itemQuestion?.id_question) {
+        const newItemQuestion = { ...item, is_selected: e.target.value };
+        return newItemQuestion;
+      }
+
+      return item;
+    });
+    setListQuestionSubmit(newListQuestionSubmit);
+  };
+
+  // console.log('dataDetailExam', dataDetailExam);
+  const getDataDetailExam = (): Promise<any> =>
+    getDetailExam(idExam).then((res: any) => {
+      setTimecowndown({
+        minute: res?.data?.duration,
+        second: 0,
+      });
+      setDataDetailExam(res?.data);
+    });
+
+  useQuery('GET_DETAIL_EXAM', getDataDetailExam);
+
+  const countdown = (minutes: any, seconds: any) => {
+    console.log('statusExam', statusExam);
+    let minutesCount = minutes;
+    let secondsCount = seconds;
+    if (minutesCount === 0 && secondsCount === 0) {
+      // Hành động khi thời gian kết thúc
+      console.log("Hết giờ!");
+      setStatusExam("finished");
+      return;
+    }
+
+    if (secondsCount === 0) {
+      secondsCount = 59;
+      minutesCount--;
+    } else {
+      secondsCount--;
+    }
+
+    setTimecowndown({
+      minute: minutesCount,
+      second: secondsCount,
+    });
+
+    idTimeout = setTimeout(() => countdown(minutesCount, secondsCount), 1000);
+  };
+
+  // useEffect(() => {
+  //   if (statusExam === 'doing') {
+  //     let minutesCount = timeCowndown.minute - 1;
+  //     let secondsCount = 60;
+  //
+  //     if (minutesCount === 0 && secondsCount === 0) {
+  //       // Hành động khi thời gian kết thúc
+  //       console.log("Hết giờ!");
+  //       setStatusExam("finished");
+  //       return;
+  //     }
+  //
+  //     if (secondsCount === 0) {
+  //       secondsCount = 59;
+  //       minutesCount--;
+  //     } else {
+  //       secondsCount--;
+  //     }
+  //   }
+  // }, [statusExam]);
+
+  const handleSubmitExam = (): void => {
+    if (statusExam === 'start') {
+      setStatusExam('doing');
+      // countdown(timeCowndown.minute - 1, 60);
+      countdown(0, 6);
+    }
+
+    if (statusExam === 'doing') {
+      setTimecowndown({
+        minute: 0,
+        second: 0,
+      });
+      setStatusExam('finished');
+    }
+    // router.push('/test_result');
+  };
+
+  useEffect(() => {
+    const listQuestionTmp =
+      dataDetailExam?.list_question &&
+      dataDetailExam?.list_question.map((item: any) => {
+        const itemQuestion = {
+          id_question: item?.id_question,
+          title_question: item?.title_question,
+          description_question: item?.description_question,
+          image_question: item?.image_question,
+          difficulty_level: item?.difficulty_level,
+          subject_question: item?.subject_question,
+          list_answer: item?.list_answer,
+          is_selected: '',
+        };
+        return itemQuestion;
+      });
+
+    setListQuestionSubmit(listQuestionTmp);
+    console.log('listQuestionTmp', listQuestionTmp);
+  }, [dataDetailExam]);
+
   return (
-    <form action="test_result" method={"get"} className={"m-6"}>
+    <form action="" method="get" className="m-6">
       <div className="lg:flex lg:justify-between mb-6">
-        <div className={"w-full mr-64"}>
-          {listQues.map((item, index) => (
+        <div className="w-[calc(100%-18rem)]">
+          {dataDetailExam?.list_question &&
+            dataDetailExam?.list_question.map((item: any, index: number) => (
               // eslint-disable-next-line react/jsx-key
               <div className="card mb-6" key={index}>
-                <h4 className="mb-2">{`Câu ${index}`}</h4>
+                <h4 className="mb-2">{`Câu ${index + 1}`}</h4>
                 <div>
                   <fieldset>
-                    <legend>
-                      Khi thiết kế kế hoạch lấy mẫu điều tra, người nghiên cứu marketing
-                      phải thông qua:
-                    </legend>
-                    <hr className="my-4"></hr>
+                    <legend>{item?.title_question}</legend>
+                    <hr className="my-4" />
 
-                    <div className="flex items-center mb-4">
-                      <input id={`country-option-2-${index}`} type="radio" name={`countries${index}`} value="USA"
-                             className="w-5 h-5 bg-transparent rounded-full border border-gray-300 focus:ring-0 checked:bg-dark-900"
-                             aria-labelledby="country-option-1" aria-describedby="country-option-1" checked/>
-                      <label htmlFor="country-option-1"
-                             className="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                        United States
-                      </label>
-                    </div>
-
-                    <div className="flex items-center mb-4">
-                      <input id={`country-option-2-${index}`} type="radio" name={`countries${index}`} value="Germany"
-                             className="w-5 h-5 bg-transparent rounded-full border border-gray-300 focus:ring-0 checked:bg-dark-900"
-                             aria-labelledby="country-option-2" aria-describedby="country-option-2"/>
-                      <label htmlFor="country-option-2"
-                             className="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                        Germany
-                      </label>
-                    </div>
-
-                    <div className="flex items-center mb-4">
-                      <input id={`country-option-3-${index}`} type="radio" name={`countries${index}`} value="Spain"
-                             className="w-5 h-5 bg-transparent rounded-full border border-gray-300 focus:ring-0 checked:bg-dark-900"
-                             aria-describedby="country-option-3"/>
-                      <label htmlFor="country-option-3"
-                             className="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                        Spain
-                      </label>
-                    </div>
-
-                    <div className="flex items-center mb-4">
-                      <input id={`country-option-4-${index}`} type="radio" name={`countries${index}`} value="United Kingdom"
-                             className="w-5 h-5 bg-transparent rounded-full border border-gray-300 focus:ring-0 checked:bg-dark-900"
-                             aria-labelledby="country-option-4" aria-describedby="country-option-4"/>
-                      <label htmlFor="country-option-4"
-                             className="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                        United Kingdom
-                      </label>
-                    </div>
+                    <Radio.Group
+                      disabled={statusExam !== 'doing'}
+                      onChange={(e) => onChangeSelectAnswer(e, item)}
+                    >
+                      <Space direction="vertical">
+                        {item?.list_answer.map(
+                          (itemAnswer: any, index: number) => (
+                            <Radio key={index} value={index + 1}>
+                              {itemAnswer?.content}
+                            </Radio>
+                          )
+                        )}
+                      </Space>
+                    </Radio.Group>
                   </fieldset>
                 </div>
               </div>
-          ))}
+            ))}
         </div>
 
-        <div
-            className={"lg:fixed top-0 right-0 z-20 flex-shrink-0  lg:pt-16 lg:w-64 h-full duration-200 lg:flex transition-width"}>
-          <div className="lg:w-52 lg:ml-6 h-fit p-6 rounded-lg bg-white mt-6 shadow-xl shadow-gray-200">
-            <h4 className="mb-2">Mục lục câu hỏi</h4>
-            <div className="mb-4 flex flex-wrap lg:grid lg:grid-cols-4">
-              {listQues.map((item, index) => (
-                  // eslint-disable-next-line react/jsx-key
-                  <div key={index}
-                       className="flex right-6 h-8 w-8 mr-1.5 mb-3 rounded border justify-center items-center hover:bg-gray-200 cursor-pointer">
-                    <span>{index}</span>
-                  </div>
-              ))}
+        <div className="lg:fixed top-0 right-[2rem] z-20 flex-shrink-0  lg:pt-16 lg:w-[17rem] h-full duration-200 lg:flex transition-width">
+          <div className="w-full lg:ml-6 h-fit p-6 rounded-lg bg-white mt-6 shadow-xl shadow-gray-200">
+            <div className="mb-[1rem]">
+              Thời gian: {timeCowndown?.minute} phút {timeCowndown?.second} giây
             </div>
-            <button className="btn w-full" onClick={() => {
-              router.push("/test_result")
-            }}>Nộp bài thi
+            <h4 className="mb-2">Mục lục câu hỏi</h4>
+            <div className="mb-4 flex flex-wrap lg:grid lg:grid-cols-5">
+              {listQuestionSubmit &&
+                listQuestionSubmit.map((item: any, index: any) => (
+                  // eslint-disable-next-line react/jsx-key
+                  <div
+                    key={index}
+                    className={`${
+                      item?.is_selected ? 'bg-active ' : ''
+                    } color-white flex right-6 h-8 w-8 mr-1.5 mb-3 rounded border justify-center items-center cursor-pointer`}
+                  >
+                    <span
+                      className={`${
+                        item?.is_selected ? 'text-white ' : 'text-black'
+                      }`}
+                    >
+                      {index + 1}
+                    </span>
+                  </div>
+                ))}
+            </div>
+
+            <button
+              type="button"
+              className={`btn w-full ${
+                statusExam !== 'start' ? 'opacity-60' : ''
+              }`}
+              disabled={statusExam !== 'start'}
+              onClick={handleSubmitExam}
+            >
+              {handleStatusExam()}
             </button>
+
+            {statusExam === 'finished' && (
+              <button
+                type="button"
+                className="mt-[1rem] btn w-full"
+                onClick={() => {
+                  router.push('/test_result');
+                }}
+              >
+                Xem kết quả
+              </button>
+            )}
           </div>
         </div>
       </div>

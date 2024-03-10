@@ -1,9 +1,9 @@
-import { BellFilled, MenuFoldOutlined, MenuOutlined } from "@ant-design/icons";
-import React from "react";
+import { BellFilled, MenuFoldOutlined, MenuOutlined } from '@ant-design/icons';
+import React from 'react';
 
 export default function Header() {
   const openSidebarMobile = () => {
-    console.log("open sidebar mobile");
+    console.log('open sidebar mobile');
   };
 
   return (
@@ -43,7 +43,7 @@ export default function Header() {
           </div>
           <div className="flex items-center">
             <button className="p-2 text-gray-500 rounded-2xl hover:text-gray-900 hover:bg-gray-100">
-              <BellFilled></BellFilled>
+              <BellFilled />
             </button>
             <a
               href=""

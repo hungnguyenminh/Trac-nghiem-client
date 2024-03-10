@@ -1,1 +1,0 @@
-export {ChangePassword as default} from "@/modules/change_password"

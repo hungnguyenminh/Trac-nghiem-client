@@ -1,1 +1,0 @@
-export {DetailDocs as default} from "@/modules/detail_docs"

@@ -1,25 +1,23 @@
-"use client";
+'use client';
+
 import {
   HeartOutlined,
   HistoryOutlined,
   LikeOutlined,
-} from "@ant-design/icons";
-import { Avatar } from "antd";
-import React from "react";
-import {useRouter} from "next/navigation";
+} from '@ant-design/icons';
+import { Avatar } from 'antd';
+import React from 'react';
+import { useRouter } from 'next/navigation';
 
 export function DocsCard() {
-  const router = useRouter()
+  const router = useRouter();
   const handleOnClick = () => {
-    router.push("/detail_docs")
-  }
+    router.push('/detail_docs');
+  };
   return (
     <div className="w-full rounded-lg border bg-white overflow-hidden hover:shadow-lg">
       <div className="flex justify-center items-center overflow-hidden">
-        <img
-          src="/img/quiz.jpg"
-          className="w-full h-[168px] overflow-hidden"
-        ></img>
+        <img src="/img/quiz.jpg" className="w-full h-[168px] overflow-hidden" />
       </div>
       <div className="p-4">
         <div>
@@ -33,7 +31,7 @@ export function DocsCard() {
         </div>
         <div className="flex mb-3">
           <div>
-            <LikeOutlined></LikeOutlined>
+            <LikeOutlined />
             <span>20</span>
           </div>
         </div>
@@ -44,7 +42,10 @@ export function DocsCard() {
         </div>
         <div className="flex justify-between">
           <div>
-            <button className="h-8 px-4 rounded-sm bg-blue-600 text-white" onClick={handleOnClick}>
+            <button
+              className="h-8 px-4 rounded-sm bg-blue-600 text-white"
+              onClick={handleOnClick}
+            >
               Xem chi tiết
             </button>
           </div>

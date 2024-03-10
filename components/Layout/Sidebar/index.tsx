@@ -1,6 +1,7 @@
-"use client";
-import React, { useState } from "react";
-import { listRoutes } from "@/routes/listRoutes";
+'use client';
+
+import React, { useState } from 'react';
+import { listRoutes } from '@/routes/listRoutes';
 
 export default function Sidebar() {
   const [activeTab, setActiveTab] = useState(true);

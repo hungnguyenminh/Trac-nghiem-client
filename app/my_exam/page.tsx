@@ -1,1 +1,0 @@
-export {MyExam as default} from "@/modules/my_exam"
