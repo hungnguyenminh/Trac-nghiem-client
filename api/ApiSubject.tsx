@@ -1,4 +1,4 @@
-import { fetcher } from '@app/api/Fetcher';
+import {fetcher} from "@/api/Fetcher";
 
 const path = {
   getAllSubject: '/subject/get-all',

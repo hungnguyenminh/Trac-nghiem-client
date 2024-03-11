@@ -22,6 +22,7 @@
     "formik": "^2.4.5",
     "formik-antd": "^2.0.4",
     "lodash": "^4.17.21",
+    "lodash.keys": "^4.2.0",
     "moment": "^2.30.1",
     "next": "14.1.0",
     "react": "^18",
@@ -33,6 +34,7 @@
     "swiper": "^11.0.5"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.202",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

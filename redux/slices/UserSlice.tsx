@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IAccountInfo } from '../../types';
 
 const initialState: any = {};
 
@@ -7,7 +6,7 @@ const UserSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    loginUser: (_, action: PayloadAction<IAccountInfo>) => {
+    loginUser: (_, action: PayloadAction<any>) => {
       return action.payload;
     },
     logoutUser: () => {

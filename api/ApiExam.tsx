@@ -67,7 +67,7 @@ function getAllExam(): Promise<IGetAllExamRes> {
     method: 'get',
   });
 }
-function getDetailExam(id: number): Promise<IDetailRes> {
+function getDetailExam(id: any): Promise<IDetailRes> {
   return fetcher({
     url: `${path.getDetailExamPath}/${id}`,
     method: 'get',

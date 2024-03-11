@@ -1,3 +1,4 @@
+// @ts-ignore
 import { fetcher } from '@app/api/Fetcher';
 
 export interface IMoneyResponse {
