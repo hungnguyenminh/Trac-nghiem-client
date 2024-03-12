@@ -12,8 +12,6 @@ import { IGetAllQuestionRes } from "@/api/ApiQuestion";
 import { getAllExam } from "@/api/ApiExam";
 import { useQuery } from "react-query";
 
-const listExam = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
-
 export function Exam() {
   const [activeIndex2, setActiveIndex2] = useState(0);
 
@@ -110,27 +108,11 @@ export function Exam() {
               onSlideChange={handleSlideChange2}
               className="swiper-layout1"
             >
-              <SwiperSlide>
-                <ExamCard />
-              </SwiperSlide>
-              <SwiperSlide>
-                <ExamCard />
-              </SwiperSlide>
-              <SwiperSlide>
-                <ExamCard />
-              </SwiperSlide>
-              <SwiperSlide>
-                <ExamCard />
-              </SwiperSlide>
-              <SwiperSlide>
-                <ExamCard />
-              </SwiperSlide>
-              <SwiperSlide>
-                <ExamCard />
-              </SwiperSlide>
-              <SwiperSlide>
-                <ExamCard />
-              </SwiperSlide>
+                {data?.data?.map((item, index) => (
+                    <SwiperSlide key={index}>
+                        <ExamCard itemExam={item} />
+                    </SwiperSlide>
+                ))}
             </Swiper>
             <MyPagination numberOfSlide={5} activeIndex={activeIndex2} />
           </div>
@@ -172,27 +154,11 @@ export function Exam() {
               onSlideChange={handleSlideChange2}
               className="swiper-layout1"
             >
-              <SwiperSlide>
-                <ExamCard />
-              </SwiperSlide>
-              <SwiperSlide>
-                <ExamCard />
-              </SwiperSlide>
-              <SwiperSlide>
-                <ExamCard />
-              </SwiperSlide>
-              <SwiperSlide>
-                <ExamCard />
-              </SwiperSlide>
-              <SwiperSlide>
-                <ExamCard />
-              </SwiperSlide>
-              <SwiperSlide>
-                <ExamCard />
-              </SwiperSlide>
-              <SwiperSlide>
-                <ExamCard />
-              </SwiperSlide>
+                {data?.data?.map((item, index) => (
+                    <SwiperSlide key={index}>
+                        <ExamCard itemExam={item} />
+                    </SwiperSlide>
+                ))}
             </Swiper>
             <MyPagination numberOfSlide={5} activeIndex={activeIndex2} />
           </div>

@@ -15,6 +15,7 @@ export function ProviderRedux({ children }: any) {
       },
     },
   });
+  
   return (
     <div>
       <Provider store={store}>
