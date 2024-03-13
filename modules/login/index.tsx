@@ -2,24 +2,19 @@
 
 import React from 'react';
 import './index.scss';
-import { Formik } from 'formik';
+import {Formik} from 'formik';
 
-import { useMutation } from 'react-query';
-import { notification } from 'antd';
-import { UnlockOutlined, UserOutlined } from '@ant-design/icons';
+import {useMutation} from 'react-query';
+import {Input, notification} from 'antd';
+import {UnlockOutlined, UserOutlined} from '@ant-design/icons';
 import Image from 'next/image';
 
 import ErrorMessageGlobal from '@/components/ErrorMessageGlobal';
 import ApiUser from '@/api/ApiUser';
-import {
-  CheckboxGlobal,
-  InputGlobal,
-  InputPasswordGlobal,
-} from '@/components/InputGlobal';
-import { ButtonGlobal } from '@/components/ButtonGlobal';
-import { loginUser } from "@/redux/slices/UserSlice";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
+import {ButtonGlobal} from '@/components/ButtonGlobal';
+import {loginUser} from "@/redux/slices/UserSlice";
+import {useDispatch} from "react-redux";
+import {useRouter} from "next/navigation";
 
 interface UserAccount {
   email: string;
@@ -39,6 +34,7 @@ export function Login(): JSX.Element {
 
   const login = useMutation(ApiUser.login);
   const handleLogin = (value: UserAccount): void => {
+    console.log('value', value)
     console.log(111);
     // loginFunction();
     const formData = new FormData();
@@ -112,9 +108,9 @@ export function Login(): JSX.Element {
           onSubmit={handleLogin}
           validateOnChange
           validateOnBlur
-          validate={validate}
+          // validate={validate}
         >
-          {({ handleSubmit }): JSX.Element => {
+          {({ handleSubmit, values, handleChange }): JSX.Element => {
             return (
               <div className="login-container">
                 <div className="login-container">
@@ -122,9 +118,11 @@ export function Login(): JSX.Element {
                   <div className="mb-[0.5rem] mt-[1rem]">
                     {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                     <label className="mb-[0.2rem]">Email</label>
-                    <InputGlobal
+                    <Input
                       name="email"
                       placeholder="email"
+                      value={values.email}
+                      onChange={handleChange}
                       prefix={<UserOutlined />}
                       className="input_login"
                       onPressEnter={(): void => handleSubmit()}
@@ -135,9 +133,11 @@ export function Login(): JSX.Element {
                   <div className="mb-[0.5rem]">
                     {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                     <label className="mb-[0.2rem]">Password</label>
-                    <InputPasswordGlobal
+                    <Input
                       name="password"
                       placeholder="Password"
+                      value={values.password}
+                      onChange={handleChange}
                       prefix={<UnlockOutlined />}
                       className="input_login"
                       onPressEnter={(): void => handleSubmit()}
@@ -146,16 +146,6 @@ export function Login(): JSX.Element {
                   </div>
 
                   <div className="forgot-password-wrap">
-                    <CheckboxGlobal
-                      name="remember"
-                      // checked
-                      onChange={(e: any): void =>
-                        handleCheckRemember(e.target.checked)
-                      }
-                    >
-                      Nhớ tài khoản
-                    </CheckboxGlobal>
-
                     <div className="forgot-password_link">Quên mật khẩu?</div>
                   </div>
 
