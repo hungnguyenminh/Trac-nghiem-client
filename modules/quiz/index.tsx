@@ -125,8 +125,8 @@ export function Quiz(props: IProps) {
   const handleSubmitExam = (): void => {
     if (statusExam === 'start') {
       setStatusExam('doing');
-      // countdown(timeCowndown.minute - 1, 60);
-      countdown(0, 14);
+      countdown(timeCowndown.minute - 1, 60);
+      // countdown(0, 14);
 
       return;
     }
