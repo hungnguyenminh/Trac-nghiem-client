@@ -34,8 +34,6 @@ export function Login(): JSX.Element {
 
   const login = useMutation(ApiUser.login);
   const handleLogin = (value: UserAccount): void => {
-    console.log('value', value)
-    console.log(111);
     // loginFunction();
     const formData = new FormData();
     formData.append('email', 'hungnm@gmail.com');
@@ -54,7 +52,6 @@ export function Login(): JSX.Element {
       },
       {
         onSuccess: (res: any) => {
-          console.log('res', res);
           if (res) {
             dispatch(loginUser(res));
             router.push('/');
@@ -138,6 +135,7 @@ export function Login(): JSX.Element {
                     <label className="mb-[0.2rem]">Password</label>
                     <Input
                         name="password"
+                        type='password'
                         placeholder="Password"
                         value={values.password}
                         onChange={handleChange}

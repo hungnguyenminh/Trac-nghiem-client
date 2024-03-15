@@ -3,143 +3,160 @@
 import {
   CheckCircleFilled,
   CheckOutlined,
-  CloseCircleFilled,
+  CloseCircleFilled, CloseOutlined,
   FlagFilled,
   MinusCircleFilled,
 } from '@ant-design/icons';
 import { Button, Collapse, Modal } from 'antd';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 
-const listQues = [
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-];
 
 export function TestResult() {
   const [isOpen, setIsOpen] = useState(false);
+  const listDataLocalStorage: any = localStorage.getItem('listQuestionSubmit');
+  const listData: any = JSON.parse(listDataLocalStorage)
+  const [listResult, setListResult] = useState<any>()
+  const [numberAnswer, setNumberAnswer] = useState({
+    totalCorrect: 0,
+    totalIncorect: 0,
+    notSelect: 0,
+  })
+
+  console.log('numberAnswer', numberAnswer)
+  console.log('listResult', listResult)
+
+  const convertAnswer = (idAnswer:  1 | 2 | 3 | 4) => {
+      if(idAnswer === 1) {
+        return 'A'
+      }
+    if(idAnswer === 2) {
+      return 'B'
+    }
+    if(idAnswer === 3) {
+      return 'C'
+    }
+    if(idAnswer === 4) {
+      return 'D'
+    }
+  }
+
+  useEffect(() => {
+    // console.log('listData', listData)
+    let arrayTmp: any = [];
+    let countAnswerCorrect = 0;
+    let notSelect = 0;
+
+    listData.forEach((item: any, index: any) => {
+      const answer_correct = item?.list_answer.findIndex((itemanswer: any) => itemanswer?.is_correct === true)
+      const newObject = {
+        answer_correct: answer_correct + 1,
+        answer_selected: item.is_selected,
+        result: answer_correct + 1 === item.is_selected
+      }
+
+      if(item.is_selected && answer_correct + 1 === item.is_selected) {
+        countAnswerCorrect++
+      }
+      if(!item.is_selected) {
+        notSelect++;
+      }
+      arrayTmp.push(newObject)
+    })
+    setListResult(arrayTmp)
+
+    setNumberAnswer({
+      totalCorrect: countAnswerCorrect,
+      totalIncorect: listData.length - countAnswerCorrect - notSelect,
+      notSelect: notSelect
+    })
+  }, []);
   return (
     <div className="m-6 p-6 rounded-lg bg-white shadow-lg shadow-gray-200">
       <h3 className="mb-6">Kết quả</h3>
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-y-8 lg:gap-x-8 mb-6">
-        <div className="p-6 rounded-lg shadow-gray-200 border bg-gray-50 w-full">
-          <div>
-            <table className="w-full text-left text-gray-500">
-              <tbody>
-                <tr>
-                  <th
-                    scope="row"
-                    className="py-4 text-gray-900 whitespace-nowrap"
-                  >
-                    <CheckCircleFilled />
-                  </th>
-                  <td className="py-4">Kết quả làm bài</td>
-                  <td className="py-4 font-semibold">40/50</td>
-                </tr>
-                <tr>
-                  <th
-                    scope="row"
-                    className="py-4 text-gray-900 whitespace-nowrap"
-                  >
-                    <CheckCircleFilled />
-                  </th>
-                  <td className="py-4">Kết quả làm bài</td>
-                  <td className="py-4 font-semibold">40/50</td>
-                </tr>
-                <tr>
-                  <th
-                    scope="row"
-                    className="py-4 text-gray-900 whitespace-nowrap"
-                  >
-                    <CheckCircleFilled />
-                  </th>
-                  <td className="py-4">Kết quả làm bài</td>
-                  <td className="py-4 font-semibold">40/50</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+        {/*<div className="p-6 rounded-lg shadow-gray-200 border bg-gray-50 w-full">*/}
+        {/*  <div>*/}
+        {/*    <table className="w-full text-left text-gray-500">*/}
+        {/*      <tbody>*/}
+        {/*        <tr>*/}
+        {/*          <th*/}
+        {/*            scope="row"*/}
+        {/*            className="py-4 text-gray-900 whitespace-nowrap"*/}
+        {/*          >*/}
+        {/*            <CheckCircleFilled />*/}
+        {/*          </th>*/}
+        {/*          <td className="py-4">Kết quả làm bài</td>*/}
+        {/*          <td className="py-4 font-semibold">40/50</td>*/}
+        {/*        </tr>*/}
+        {/*        <tr>*/}
+        {/*          <th*/}
+        {/*            scope="row"*/}
+        {/*            className="py-4 text-gray-900 whitespace-nowrap"*/}
+        {/*          >*/}
+        {/*            <CheckCircleFilled />*/}
+        {/*          </th>*/}
+        {/*          <td className="py-4">Kết quả làm bài</td>*/}
+        {/*          <td className="py-4 font-semibold">40/50</td>*/}
+        {/*        </tr>*/}
+        {/*        <tr>*/}
+        {/*          <th*/}
+        {/*            scope="row"*/}
+        {/*            className="py-4 text-gray-900 whitespace-nowrap"*/}
+        {/*          >*/}
+        {/*            <CheckCircleFilled />*/}
+        {/*          </th>*/}
+        {/*          <td className="py-4">Kết quả làm bài</td>*/}
+        {/*          <td className="py-4 font-semibold">40/50</td>*/}
+        {/*        </tr>*/}
+        {/*      </tbody>*/}
+        {/*    </table>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
         <div className="md:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-8">
           <div className="rounded-lg border flex flex-col justify-center items-center p-2">
             <h3 className="text-green-700 mb-2">
               <CheckCircleFilled />
             </h3>
             <h4 className="text-green-700 mb-2">Số câu đúng</h4>
-            <h3>40</h3>
+            <h3>{numberAnswer?.totalCorrect}</h3>
           </div>
           <div className="rounded-lg border flex flex-col justify-center items-center p-2">
             <h3 className="text-red-700 mb-2">
-              <CloseCircleFilled />
+              <CloseCircleFilled/>
             </h3>
             <h4 className="text-red-700 mb-2">Số câu sai</h4>
-            <h3>10</h3>
+            <h3>{numberAnswer?.totalIncorect}</h3>
           </div>
           <div className="rounded-lg border flex flex-col justify-center items-center p-2">
             <h3 className="text-gray-700 mb-2">
               <MinusCircleFilled />
             </h3>
             <h4 className="text-gray-700 mb-2">Bỏ qua</h4>
-            <h3>0</h3>
+            <h3>{numberAnswer?.notSelect}</h3>
           </div>
-          <div className="rounded-lg border flex flex-col justify-center items-center p-2">
-            <h3 className="text-gray-700 mb-2">
-              <FlagFilled />
-            </h3>
-            <h4 className="text-gray-700 mb-2">Điểm số</h4>
-            <h3>8</h3>
-          </div>
+          {/*<div className="rounded-lg border flex flex-col justify-center items-center p-2">*/}
+          {/*  <h3 className="text-gray-700 mb-2">*/}
+          {/*    <FlagFilled />*/}
+          {/*  </h3>*/}
+          {/*  <h4 className="text-gray-700 mb-2">Điểm số</h4>*/}
+          {/*  <h3>8</h3>*/}
+          {/*</div>*/}
         </div>
       </div>
       <h3 className="mb-6">Đáp án</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {listQues.map((item, index) => (
+        {listResult && listResult.map((item: any, index: any) => (
           // eslint-disable-next-line react/jsx-key
           <div className="flex items-center">
             <div className="rounded-[50%] w-8 h-8 flex items-center justify-center bg-blue-200 text-blue-950 font-bold mr-2">
               <span>{index}</span>
             </div>
-            <span>A:</span>
-            <span className="line-through mr-2">D</span>
-            <CheckOutlined className="text-green-700 mr-2" />
-            <Button onClick={() => setIsOpen(true)}>Chi tiết</Button>
+            <span className='mr-[0.2rem]'>{convertAnswer(item?.answer_correct)}</span>
+            <span className="line-through mr-2">{convertAnswer(item?.answer_selected)}</span>
+            {item?.result === true ? <CheckOutlined className="text-green-700 mr-2" /> : <CloseOutlined className='text-red-700' />}
+
+
+            {/*<Button onClick={() => setIsOpen(true)}>Chi tiết</Button>*/}
           </div>
         ))}
       </div>

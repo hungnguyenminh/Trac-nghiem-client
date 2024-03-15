@@ -34,6 +34,8 @@ export function Quiz(props: IProps) {
     },
   ]);
 
+  console.log('listQuestionSubmit', listQuestionSubmit)
+
   const handleStatusExam = (): string => {
     let text = '';
     switch (statusExam) {
@@ -41,13 +43,10 @@ export function Quiz(props: IProps) {
         text = 'Bắt đầu bài thi';
         break;
       case 'doing':
-        text = 'Nộp bài thi';
-        break;
-      case 'finished':
-        text = 'Hoàn thành';
+        text = 'Đang làm đề';
         break;
       default:
-        text = '';
+        text = 'Hoàn thành';
     }
 
     return text;
@@ -78,7 +77,6 @@ export function Quiz(props: IProps) {
   useQuery('GET_DETAIL_EXAM', getDataDetailExam);
 
   const countdown = (minutes: any, seconds: any) => {
-    console.log('statusExam', statusExam);
     let minutesCount = minutes;
     let secondsCount = seconds;
     if (minutesCount === 0 && secondsCount === 0) {
@@ -128,16 +126,15 @@ export function Quiz(props: IProps) {
     if (statusExam === 'start') {
       setStatusExam('doing');
       // countdown(timeCowndown.minute - 1, 60);
-      countdown(0, 6);
+      countdown(0, 14);
+
+      return;
     }
 
-    if (statusExam === 'doing') {
-      setTimecowndown({
-        minute: 0,
-        second: 0,
-      });
-      setStatusExam('finished');
-    }
+    router.push('/test_result');
+    localStorage.setItem('listQuestionSubmit', JSON.stringify(listQuestionSubmit))
+
+    // router.push()
     // router.push('/test_result');
   };
 
@@ -226,25 +223,25 @@ export function Quiz(props: IProps) {
             <button
               type="button"
               className={`btn w-full ${
-                statusExam !== 'start' ? 'opacity-60' : ''
+                statusExam === 'doing' ? 'opacity-60' : ''
               }`}
-              disabled={statusExam !== 'start'}
+              disabled={statusExam === 'doing'}
               onClick={handleSubmitExam}
             >
               {handleStatusExam()}
             </button>
 
-            {statusExam === 'finished' && (
-              <button
-                type="button"
-                className="mt-[1rem] btn w-full"
-                onClick={() => {
-                  router.push('/test_result');
-                }}
-              >
-                Xem kết quả
-              </button>
-            )}
+            {/*{statusExam === 'finished' && (*/}
+            {/*  <button*/}
+            {/*    type="button"*/}
+            {/*    className="mt-[1rem] btn w-full"*/}
+            {/*    onClick={() => {*/}
+            {/*      router.push('/test_result');*/}
+            {/*    }}*/}
+            {/*  >*/}
+            {/*    Xem kết quả*/}
+            {/*  </button>*/}
+            {/*)}*/}
           </div>
         </div>
       </div>

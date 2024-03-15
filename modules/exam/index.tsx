@@ -19,7 +19,6 @@ export function Exam() {
 
   const { data, refetch, isLoading } = useQuery('GET_ALL_EXAM', getDataExam);
 
-  console.log("data", data);
   const handleSlideChange2 = (swiper: any) => {
     setActiveIndex2(swiper.activeIndex);
   };

@@ -22,7 +22,8 @@ export function ExamCard(props: IProps) {
   const isOpenModal = useBoolean(false)
 
   const handleStartExam = (): void => {
-      if(!user){
+    console.log('user', user)
+      if(user?.access_token){
         router.push(`/quiz/${itemExam?.id}`);
         return;
       }
