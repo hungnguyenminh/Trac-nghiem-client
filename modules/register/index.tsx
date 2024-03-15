@@ -202,11 +202,10 @@ export function Register(): JSX.Element {
                       </div>
                       <ButtonGlobal
                           onClick={handleSubmit}
-                          className="btn-login"
+                          className="btn-login mt-2"
                           title="Đăng kí"
                           type="primary-filled"
                           loading={register.isLoading}
-                          class='mt-2'
                       />
                       <div className="forgot-password-wrap flex">
                         <div onClick={goToRegister}
