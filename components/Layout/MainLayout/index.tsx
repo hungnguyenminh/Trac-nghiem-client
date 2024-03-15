@@ -48,11 +48,11 @@ export default function MainLayout({
     setIsExtend(a);
   };
 
-  useEffect(() => {
-    if (!user?.access_token) {
-      router.push('/login');
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!user?.access_token) {
+  //     router.push('/login');
+  //   }
+  // }, []);
 
   return (
     <main className="bg-gray-50 min-h-[100vh] w-full">
@@ -87,7 +87,7 @@ export default function MainLayout({
             </div>
           </div>
           <div className="flex items-center pr-3 lg:pr-5">
-            <span className="mr-[0.2rem]">{user?.user?.fullname}</span>
+            <button className="mr-[0.2rem]">{user?.user?.fullname ?? 'Đăng Nhập'}</button>
             <Dropdown menu={{ items }} placement="bottomRight" arrow>
               <Avatar>U</Avatar>
             </Dropdown>

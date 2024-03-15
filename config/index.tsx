@@ -4,7 +4,8 @@ const STORE_NAME = 'state';
 // NETWORK
 const NETWORK_CONFIG = {
   HOST: process.env.NEXT_PUBLIC_APP_URL,
-  API_BASE_URL: 'https://yhoctracnghiem.top/api/',
+  // API_BASE_URL: 'https://yhoctracnghiem.top/api/',
+  API_BASE_URL: 'http://127.0.0.1:8000/api/',
   BASE_URL: process.env.NEXT_PUBLIC_WEB_URL,
   TIMEOUT: 30000,
   RETRY: false,

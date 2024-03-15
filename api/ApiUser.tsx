@@ -69,6 +69,7 @@ const path = {
   getUser: '/auth/get-user',
   login: '/auth/login',
   getAllUser: '/user',
+  register: '/auth/register'
 };
 
 function getAllUser(params: IParamsGetAllUser): Promise<IGetListUser> {
@@ -93,6 +94,10 @@ function login(body: any): Promise<ILoginResponse> {
   return fetcher({ url: path.login, method: 'post', data: body });
 }
 
+function register(body: any): Promise<ILoginResponse> {
+  return fetcher({ url: path.register, method: 'post', data: body });
+}
+
 function getUser(): Promise<IGetUserResponse> {
   return fetcher({ url: path.getUser, method: 'get' });
 }
@@ -106,6 +111,7 @@ function isLogin(): boolean {
 
 export default {
   login,
+  register,
   isLogin,
   getUser,
   getAllUser,

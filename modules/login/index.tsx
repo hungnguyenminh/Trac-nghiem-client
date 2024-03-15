@@ -67,6 +67,9 @@ export function Login(): JSX.Element {
     );
   };
 
+  const goToRegister = (): void => {
+    router.push('/register')
+  }
   const handleCheckRemember = (checked: boolean): void => {
     if (checked) {
       // dispatch(rememberAccount());
@@ -119,43 +122,47 @@ export function Login(): JSX.Element {
                     {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                     <label className="mb-[0.2rem]">Email</label>
                     <Input
-                      name="email"
-                      placeholder="email"
-                      value={values.email}
-                      onChange={handleChange}
-                      prefix={<UserOutlined />}
-                      className="input_login"
-                      onPressEnter={(): void => handleSubmit()}
+                        name="email"
+                        placeholder="email"
+                        value={values.email}
+                        onChange={handleChange}
+                        prefix={<UserOutlined/>}
+                        className="input_login"
+                        onPressEnter={(): void => handleSubmit()}
                     />
-                    <ErrorMessageGlobal name="email" />
+                    <ErrorMessageGlobal name="email"/>
                   </div>
 
                   <div className="mb-[0.5rem]">
                     {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                     <label className="mb-[0.2rem]">Password</label>
                     <Input
-                      name="password"
-                      placeholder="Password"
-                      value={values.password}
-                      onChange={handleChange}
-                      prefix={<UnlockOutlined />}
-                      className="input_login"
-                      onPressEnter={(): void => handleSubmit()}
+                        name="password"
+                        placeholder="Password"
+                        value={values.password}
+                        onChange={handleChange}
+                        prefix={<UnlockOutlined/>}
+                        className="input_login"
+                        onPressEnter={(): void => handleSubmit()}
                     />
-                    <ErrorMessageGlobal name="password" />
+                    <ErrorMessageGlobal name="password"/>
                   </div>
 
                   <div className="forgot-password-wrap">
-                    <div className="forgot-password_link">Quên mật khẩu?</div>
+                    <div className="forgot-password_link cursor-pointer">Quên mật khẩu?</div>
                   </div>
 
                   <ButtonGlobal
-                    onClick={handleSubmit}
-                    className="btn-login"
-                    title="Đăng nhập"
-                    type="primary-filled"
-                    loading={login.isLoading}
+                      onClick={handleSubmit}
+                      className="btn-login"
+                      title="Đăng nhập"
+                      type="primary-filled"
+                      loading={login.isLoading}
                   />
+                  <div className="forgot-password-wrap flex mt-[1rem] justify-center">
+                    <div className="forgot-password_link">Bạn chưa có tài khoản?</div>
+                    <div onClick={goToRegister} className="forgot-password_link cursor-pointer text-blue-600 font-bold ml-[0.5rem]">Đăng kí ngay</div>
+                  </div>
                 </div>
               </div>
             );
