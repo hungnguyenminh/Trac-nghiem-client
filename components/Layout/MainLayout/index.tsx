@@ -11,24 +11,6 @@ import Link from 'next/link';
 import Footer from '@/components/Layout/Footer';
 import { useSelector } from "react-redux";
 
-const items: MenuProps['items'] = [
-  {
-    key: '1',
-    label: (
-      <Link href="/profile/info">
-        <span>Trang cá nhân</span>
-      </Link>
-    ),
-  },
-  {
-    key: '2',
-    label: (
-      <Link href="/login">
-        <span>Đăng xuất</span>
-      </Link>
-    ),
-  },
-];
 
 export default function MainLayout({
   children,
@@ -53,6 +35,26 @@ export default function MainLayout({
   //     router.push('/login');
   //   }
   // }, []);
+
+
+  const items: MenuProps['items'] = [
+    {
+      key: '1',
+      label: (
+          <Link href="/profile/info">
+            <span>Trang cá nhân</span>
+          </Link>
+      ),
+    },
+    {
+      key: '2',
+      label: (
+          <Link href="/login">
+            <span>{user?.user?.fullname ? 'Đăng xuất': 'Đăng nhập'}</span>
+          </Link>
+      ),
+    },
+  ];
 
   return (
     <main className="bg-gray-50 min-h-[100vh] w-full">
