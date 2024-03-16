@@ -7,6 +7,7 @@ import { useQuery } from 'react-query';
 import { Modal, Radio, RadioChangeEvent, Space } from 'antd';
 import { LoadingGlobal } from "@/components/LoadingGlobal";
 import { useBoolean } from "@/ultils/custom-hook";
+import { CheckCircleFilled, CloseCircleFilled } from "@ant-design/icons";
 
 interface IProps {
   idExam?: number;
@@ -17,7 +18,6 @@ export function Quiz(props: IProps) {
 
   const router = useRouter();
   const isOpenModalConfirm = useBoolean(false);
-  const [dataDetailExam, setDataDetailExam] = useState<any>();
   const [statusExam, setStatusExam] = useState<'start' | 'doing' | 'finished'>(
     'start'
   );
@@ -26,9 +26,7 @@ export function Quiz(props: IProps) {
     second: 0,
   });
 
-  console.log('dataDetailExam', dataDetailExam);
-
-  const [listQuestionSubmit, setListQuestionSubmit] = useState<any>([]);
+  const [listQuestionSubmit, setListQuestionSubmit] = useState<any>();
 
   const handleStatusExam = (): string => {
     let text = '';
@@ -40,7 +38,9 @@ export function Quiz(props: IProps) {
         text = 'Nộp bài';
         break;
       default:
-        text = 'Xem kết quả';
+        text = 'Quay lại trang chủ';
+      // default:
+      //   text = 'Xem kết quả';
     }
 
     return text;
@@ -73,7 +73,7 @@ export function Quiz(props: IProps) {
         minute: res?.data?.duration,
         second: 0,
       });
-      setDataDetailExam(res?.data);
+      setListQuestionSubmit(res?.data?.list_question);
     });
 
   const fetchDetailExam = useQuery('GET_DETAIL_EXAM', getDataDetailExam);
@@ -125,33 +125,14 @@ export function Quiz(props: IProps) {
       setStatusExam('finished');
       return;
     }
+    router.push('/');
 
-    router.push('/test_result');
-    localStorage.setItem(
-      'listQuestionSubmit',
-      JSON.stringify(listQuestionSubmit)
-    );
+    // router.push('/test_result');
+    // localStorage.setItem(
+    //   'listQuestionSubmit',
+    //   JSON.stringify(listQuestionSubmit)
+    // );
   };
-
-  useEffect(() => {
-    const listQuestionTmp =
-      dataDetailExam?.list_question &&
-      dataDetailExam?.list_question.map((item: any) => {
-        const itemQuestion = {
-          id_question: item?.id_question,
-          title_question: item?.title_question,
-          description_question: item?.description_question,
-          image_question: item?.image_question,
-          difficulty_level: item?.difficulty_level,
-          subject_question: item?.subject_question,
-          list_answer: item?.list_answer,
-          is_selected: '',
-        };
-        return itemQuestion;
-      });
-
-    setListQuestionSubmit(listQuestionTmp);
-  }, [dataDetailExam]);
 
   useEffect(() => {
     if (statusExam === 'start') {
@@ -183,8 +164,8 @@ export function Quiz(props: IProps) {
           {fetchDetailExam.isLoading ? (
             <LoadingGlobal number={5} />
           ) : (
-            dataDetailExam?.list_question &&
-            dataDetailExam?.list_question.map((item: any, index: number) => (
+            listQuestionSubmit &&
+            listQuestionSubmit.map((item: any, index: number) => (
               // eslint-disable-next-line react/jsx-key
               <div className="card mb-6" key={index}>
                 <h4 className="mb-2">{`Câu ${index + 1}`}</h4>
@@ -206,7 +187,39 @@ export function Quiz(props: IProps) {
                         {item?.list_answer.map(
                           (itemAnswer: any, index: number) => (
                             <Radio key={index} value={index + 1}>
-                              {itemAnswer?.content}
+                              <div className="flex items-center">
+                                {itemAnswer?.content}
+
+                                {statusExam === 'finished' && (
+                                  <div>
+                                    <div className="ml-2 text-red-700">
+                                      {item.is_selected === index + 1 &&
+                                        (itemAnswer?.is_correct ? (
+                                          <CheckCircleFilled
+                                            style={{
+                                              fontSize: 16,
+                                              color: "green",
+                                            }}
+                                          />
+                                        ) : (
+                                          <CloseCircleFilled
+                                            style={{ fontSize: 16 }}
+                                          />
+                                        ))}
+
+                                      {item.is_selected !== index + 1 &&
+                                        itemAnswer?.is_correct && (
+                                          <CheckCircleFilled
+                                            style={{
+                                              fontSize: 16,
+                                              color: "green",
+                                            }}
+                                          />
+                                        )}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
                             </Radio>
                           )
                         )}
