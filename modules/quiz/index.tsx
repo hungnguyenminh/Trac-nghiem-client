@@ -14,7 +14,6 @@ interface IProps {
 export function Quiz(props: IProps) {
   const { idExam } = props;
 
-  let idTimeout;
 
   const router = useRouter();
   const [dataDetailExam, setDataDetailExam] = useState<any>();
@@ -23,8 +22,8 @@ export function Quiz(props: IProps) {
     'start'
   );
   const [timeCowndown, setTimecowndown] = useState<any>({
-    minute: '',
-    second: '',
+    minute: 0,
+    second: 0,
   });
   const [listQuestionSubmit, setListQuestionSubmit] = useState<any>([
     {
@@ -34,8 +33,6 @@ export function Quiz(props: IProps) {
     },
   ]);
 
-  console.log('listQuestionSubmit', listQuestionSubmit)
-
   const handleStatusExam = (): string => {
     let text = '';
     switch (statusExam) {
@@ -43,10 +40,10 @@ export function Quiz(props: IProps) {
         text = 'Bắt đầu bài thi';
         break;
       case 'doing':
-        text = 'Đang làm đề';
+        text = 'Hoàn thành';
         break;
       default:
-        text = 'Hoàn thành';
+        text = 'Xem kết quả';
     }
 
     return text;
@@ -64,7 +61,6 @@ export function Quiz(props: IProps) {
     setListQuestionSubmit(newListQuestionSubmit);
   };
 
-  // console.log('dataDetailExam', dataDetailExam);
   const getDataDetailExam = (): Promise<any> =>
     getDetailExam(idExam).then((res: any) => {
       setTimecowndown({
@@ -81,8 +77,7 @@ export function Quiz(props: IProps) {
     let secondsCount = seconds;
     if (minutesCount === 0 && secondsCount === 0) {
       // Hành động khi thời gian kết thúc
-      console.log("Hết giờ!");
-      setStatusExam("finished");
+      // setStatusExam("finished");
       return;
     }
 
@@ -98,44 +93,29 @@ export function Quiz(props: IProps) {
       second: secondsCount,
     });
 
-    idTimeout = setTimeout(() => countdown(minutesCount, secondsCount), 1000);
   };
 
-  // useEffect(() => {
-  //   if (statusExam === 'doing') {
-  //     let minutesCount = timeCowndown.minute - 1;
-  //     let secondsCount = 60;
-  //
-  //     if (minutesCount === 0 && secondsCount === 0) {
-  //       // Hành động khi thời gian kết thúc
-  //       console.log("Hết giờ!");
-  //       setStatusExam("finished");
-  //       return;
-  //     }
-  //
-  //     if (secondsCount === 0) {
-  //       secondsCount = 59;
-  //       minutesCount--;
-  //     } else {
-  //       secondsCount--;
-  //     }
-  //   }
-  // }, [statusExam]);
+
+
 
   const handleSubmitExam = (): void => {
     if (statusExam === 'start') {
       setStatusExam('doing');
-      countdown(timeCowndown.minute - 1, 60);
-      // countdown(0, 14);
+      setTimecowndown({
+        minute: timeCowndown.minute - 1,
+        second: 60
+      })
 
+      return;
+    }
+
+    if(statusExam === 'doing'){
+      setStatusExam('finished');
       return;
     }
 
     router.push('/test_result');
     localStorage.setItem('listQuestionSubmit', JSON.stringify(listQuestionSubmit))
-
-    // router.push()
-    // router.push('/test_result');
   };
 
   useEffect(() => {
@@ -156,11 +136,31 @@ export function Quiz(props: IProps) {
       });
 
     setListQuestionSubmit(listQuestionTmp);
-    console.log('listQuestionTmp', listQuestionTmp);
   }, [dataDetailExam]);
 
+
+  useEffect(() => {
+    if(statusExam === 'start'){
+      return;
+    }
+
+    if(statusExam === 'finished' && timeCowndown.minute !== 0 && timeCowndown.second !==0){
+
+      setTimecowndown({
+        minute: 0,
+        second: 0,
+      });
+
+      return;
+    }
+
+    setTimeout(() => {
+      countdown(timeCowndown.minute, timeCowndown.second)
+    }, 1000);
+  }, [timeCowndown, statusExam]);
+
   return (
-    <form action="" method="get" className="m-6">
+    <div className="m-6">
       <div className="lg:flex lg:justify-between mb-6">
         <div className="w-[calc(100%-18rem)]">
           {dataDetailExam?.list_question &&
@@ -222,29 +222,14 @@ export function Quiz(props: IProps) {
 
             <button
               type="button"
-              className={`btn w-full ${
-                statusExam === 'doing' ? 'opacity-60' : ''
-              }`}
-              disabled={statusExam === 'doing'}
+              className={`btn w-full `}
               onClick={handleSubmitExam}
             >
               {handleStatusExam()}
             </button>
-
-            {/*{statusExam === 'finished' && (*/}
-            {/*  <button*/}
-            {/*    type="button"*/}
-            {/*    className="mt-[1rem] btn w-full"*/}
-            {/*    onClick={() => {*/}
-            {/*      router.push('/test_result');*/}
-            {/*    }}*/}
-            {/*  >*/}
-            {/*    Xem kết quả*/}
-            {/*  </button>*/}
-            {/*)}*/}
           </div>
         </div>
       </div>
-    </form>
+    </div>
   );
 }
