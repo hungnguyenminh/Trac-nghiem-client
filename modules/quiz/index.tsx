@@ -4,8 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getDetailExam } from '@/api/ApiExam';
 import { useQuery } from 'react-query';
-import { Radio, RadioChangeEvent, Space } from 'antd';
-import { useBoolean } from '@/ultils/custom-hook';
+import { Modal, Radio, RadioChangeEvent, Space } from 'antd';
+import { LoadingGlobal } from "@/components/LoadingGlobal";
+import { useBoolean } from "@/ultils/custom-hook";
 
 interface IProps {
   idExam?: number;
@@ -14,10 +15,9 @@ interface IProps {
 export function Quiz(props: IProps) {
   const { idExam } = props;
 
-
   const router = useRouter();
+  const isOpenModalConfirm = useBoolean(false);
   const [dataDetailExam, setDataDetailExam] = useState<any>();
-  const isStart = useBoolean(false);
   const [statusExam, setStatusExam] = useState<'start' | 'doing' | 'finished'>(
     'start'
   );
@@ -25,13 +25,10 @@ export function Quiz(props: IProps) {
     minute: 0,
     second: 0,
   });
-  const [listQuestionSubmit, setListQuestionSubmit] = useState<any>([
-    {
-      content: '',
-      is_correct: false,
-      is_selected: '',
-    },
-  ]);
+
+  console.log('dataDetailExam', dataDetailExam);
+
+  const [listQuestionSubmit, setListQuestionSubmit] = useState<any>([]);
 
   const handleStatusExam = (): string => {
     let text = '';
@@ -49,6 +46,14 @@ export function Quiz(props: IProps) {
     return text;
   };
 
+  const isSelectedAll = (): boolean => {
+    const findQuestionNotAnswer = listQuestionSubmit.filter(
+      (item: any) => !item.is_selected
+    );
+
+    return !(findQuestionNotAnswer.length > 0);
+  };
+
   const onChangeSelectAnswer = (e: RadioChangeEvent, itemQuestion: any) => {
     const newListQuestionSubmit = listQuestionSubmit.map((item: any) => {
       if (item?.id_question === itemQuestion?.id_question) {
@@ -58,6 +63,7 @@ export function Quiz(props: IProps) {
 
       return item;
     });
+
     setListQuestionSubmit(newListQuestionSubmit);
   };
 
@@ -70,7 +76,7 @@ export function Quiz(props: IProps) {
       setDataDetailExam(res?.data);
     });
 
-  useQuery('GET_DETAIL_EXAM', getDataDetailExam);
+  const fetchDetailExam = useQuery('GET_DETAIL_EXAM', getDataDetailExam);
 
   const countdown = (minutes: any, seconds: any) => {
     let minutesCount = minutes;
@@ -92,30 +98,39 @@ export function Quiz(props: IProps) {
       minute: minutesCount,
       second: secondsCount,
     });
-
   };
 
-
-
+  const handleConfirmSubmit = (): void => {
+    setStatusExam('finished');
+    isOpenModalConfirm.onFalse();
+  };
 
   const handleSubmitExam = (): void => {
     if (statusExam === 'start') {
       setStatusExam('doing');
       setTimecowndown({
         minute: timeCowndown.minute - 1,
-        second: 60
-      })
+        second: 60,
+      });
 
       return;
     }
 
-    if(statusExam === 'doing'){
+    if (statusExam === 'doing') {
+      if (!isSelectedAll()) {
+        console.log('isSelectedAll()', isSelectedAll());
+        isOpenModalConfirm.onTrue();
+        return;
+      }
       setStatusExam('finished');
       return;
     }
 
     router.push('/test_result');
-    localStorage.setItem('listQuestionSubmit', JSON.stringify(listQuestionSubmit))
+    localStorage.setItem(
+      'listQuestionSubmit',
+      JSON.stringify(listQuestionSubmit)
+    );
   };
 
   useEffect(() => {
@@ -138,14 +153,16 @@ export function Quiz(props: IProps) {
     setListQuestionSubmit(listQuestionTmp);
   }, [dataDetailExam]);
 
-
   useEffect(() => {
-    if(statusExam === 'start'){
+    if (statusExam === 'start') {
       return;
     }
 
-    if(statusExam === 'finished' && timeCowndown.minute !== 0 && timeCowndown.second !==0){
-
+    if (
+      statusExam === 'finished' &&
+      timeCowndown.minute !== 0 &&
+      timeCowndown.second !== 0
+    ) {
       setTimecowndown({
         minute: 0,
         second: 0,
@@ -155,7 +172,7 @@ export function Quiz(props: IProps) {
     }
 
     setTimeout(() => {
-      countdown(timeCowndown.minute, timeCowndown.second)
+      countdown(timeCowndown.minute, timeCowndown.second);
     }, 1000);
   }, [timeCowndown, statusExam]);
 
@@ -163,7 +180,10 @@ export function Quiz(props: IProps) {
     <div className="m-6">
       <div className="lg:flex lg:justify-between mb-6">
         <div className="w-[calc(100%-18rem)]">
-          {dataDetailExam?.list_question &&
+          {fetchDetailExam.isLoading ? (
+            <LoadingGlobal number={5} />
+          ) : (
+            dataDetailExam?.list_question &&
             dataDetailExam?.list_question.map((item: any, index: number) => (
               // eslint-disable-next-line react/jsx-key
               <div className="card mb-6" key={index}>
@@ -171,6 +191,11 @@ export function Quiz(props: IProps) {
                 <div>
                   <fieldset>
                     <legend>{item?.title_question}</legend>
+                    {statusExam === 'finished' && (
+                      <p className="mt-2">
+                        Giải thích: {item?.description_question}
+                      </p>
+                    )}
                     <hr className="my-4" />
 
                     <Radio.Group
@@ -190,7 +215,8 @@ export function Quiz(props: IProps) {
                   </fieldset>
                 </div>
               </div>
-            ))}
+            ))
+          )}
         </div>
 
         <div className="lg:fixed top-0 right-[2rem] z-20 flex-shrink-0  lg:pt-16 lg:w-[17rem] h-full duration-200 lg:flex transition-width">
@@ -222,13 +248,36 @@ export function Quiz(props: IProps) {
 
             <button
               type="button"
-              className={`btn w-full `}
+              className={`btn w-full ${
+                fetchDetailExam.isLoading ? 'opacity-75 cursor-not-allowed' : ''
+              }`}
+              disabled={fetchDetailExam.isLoading}
               onClick={handleSubmitExam}
             >
               {handleStatusExam()}
             </button>
           </div>
         </div>
+
+        <Modal
+          title="Lưu ý"
+          open={isOpenModalConfirm.value}
+          onOk={handleConfirmSubmit}
+          onCancel={isOpenModalConfirm.onFalse}
+        >
+          <p className="text-orange-700 font-bold text-[1rem]">
+            Bạn chưa hoàn thành bài thi, kiểm tra kết quả làm bài ở phía bên
+            phải màn hình.
+          </p>
+          <div className="flex flex-wrap">
+            Nếu bạn muốn tiếp tục làm bài, hãy nhấn
+            <p className="mx-2 font-bold text-orange-600">CANCEL</p>
+          </div>
+          <div className="flex flex-wrap">
+            Nếu bạn muốn nộp bài, hãy nhấn
+            <p className="mx-2 font-bold text-blue-600">OK</p>
+          </div>
+        </Modal>
       </div>
     </div>
   );
