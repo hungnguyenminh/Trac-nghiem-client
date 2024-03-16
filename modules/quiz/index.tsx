@@ -40,7 +40,7 @@ export function Quiz(props: IProps) {
         text = 'Bắt đầu bài thi';
         break;
       case 'doing':
-        text = 'Hoàn thành';
+        text = 'Nộp bài';
         break;
       default:
         text = 'Xem kết quả';
