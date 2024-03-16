@@ -11,13 +11,29 @@ import MyPagination from '../../components/Pagination';
 import { IGetAllQuestionRes } from "@/api/ApiQuestion";
 import { getAllExam } from "@/api/ApiExam";
 import { useQuery } from "react-query";
+import {postData} from "@/lib/post-data";
 
-export function Exam() {
+interface Iprops{
+    listExam?: any
+}
+
+export function Exam(props: Iprops) {
+  const {listExam} = props;
+
+    // const paramApi: any = {
+    //     url: `exam-question/get-all`,
+    //     method: 'get',
+    // };
+    //
+    // const listExam111=  postData(paramApi).then((res) => console.log('ress', res));
+    //
+    // console.log('listExam111', listExam111)
+
   const [activeIndex2, setActiveIndex2] = useState(0);
 
-  const getDataExam = (): Promise<IGetAllQuestionRes> => getAllExam();
+  // const getDataExam = (): Promise<IGetAllQuestionRes> => getAllExam();
 
-  const { data, refetch, isLoading } = useQuery('GET_ALL_EXAM', getDataExam);
+  // const { data, refetch, isLoading } = useQuery('GET_ALL_EXAM', getDataExam);
 
   const handleSlideChange2 = (swiper: any) => {
     setActiveIndex2(swiper.activeIndex);
@@ -61,7 +77,7 @@ export function Exam() {
               onSlideChange={handleSlideChange2}
               className="swiper-layout1"
             >
-              {data?.data?.map((item, index) => (
+              {listExam && listExam?.map((item: any, index: number) => (
                 <SwiperSlide key={index}>
                   <ExamCard itemExam={item} />
                 </SwiperSlide>
@@ -107,7 +123,7 @@ export function Exam() {
               onSlideChange={handleSlideChange2}
               className="swiper-layout1"
             >
-                {data?.data?.map((item, index) => (
+                {listExam && listExam?.map((item: any, index: number) => (
                     <SwiperSlide key={index}>
                         <ExamCard itemExam={item} />
                     </SwiperSlide>
@@ -153,7 +169,7 @@ export function Exam() {
               onSlideChange={handleSlideChange2}
               className="swiper-layout1"
             >
-                {data?.data?.map((item, index) => (
+                {listExam && listExam?.map((item: any, index: number) => (
                     <SwiperSlide key={index}>
                         <ExamCard itemExam={item} />
                     </SwiperSlide>

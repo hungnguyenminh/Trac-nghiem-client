@@ -7,7 +7,7 @@ const fetchDataAuthen = async ({ url, method = 'post', body, token }: any) => {
     headers.append('Authorization', `Bearer ${token}`);
   }
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_REST_API}/${url}`, {
+  const res = await fetch(`https://yhoctracnghiem.top/api/${url}`, {
     method: method,
     body: body,
     // mode: 'cors',
