@@ -3,6 +3,8 @@
 import React from 'react';
 import './index.scss';
 import {Formik} from 'formik';
+// @ts-ignore
+import * as Yup from "yup";
 
 import {useMutation} from 'react-query';
 import {Input, notification} from 'antd';
@@ -40,13 +42,30 @@ export function Register(): JSX.Element {
     // pass_jwt: "",
   };
 
+
+  const validate = Yup.object({
+    username: Yup.string()
+        .required("Vui lòng nhập tên tài khoản!"),
+    fullname: Yup.string()
+        .required("Vui lòng nhập họ và tên!"),
+    email: Yup.string()
+        .email("Email không đúng định dạng")
+        .required("Vui lòng nhập email!"),
+    password: Yup.string()
+        .min(6, "Mật khẩu ít nhất 6 kí tự")
+        .required("Vui lòng nhập mật khẩu!"),
+    confirm_password: Yup.string()
+        .oneOf([Yup.ref("password")], "Mật khẩu và xác nhận mật khẩu không giống nhau")
+        .required("Vui lòng nhập xác nhận mật khẩu!")
+  })
+
   const register = useMutation(ApiUser.register);
   const handleLogin = (value: UserAccount): void => {
-    if(value.password !== value.confirm_password){
-      notification.error({
-        message: 'Mật khẩu và nhập lại mật khẩu phải trùng nhau !',
-      });
-    }
+    // if(value.password !== value.confirm_password){
+    //   notification.error({
+    //     message: 'Mật khẩu và nhập lại mật khẩu phải trùng nhau !',
+    //   });
+    // }
     console.log('value', value)
     register.mutate(
         {
@@ -89,19 +108,19 @@ export function Register(): JSX.Element {
     }
   };
 
-  const validate = (values: UserAccount) => {
-    const errors: Partial<UserAccount> = {};
-
-    if (!values.email) {
-      errors.email = 'Vui lòng nhập email';
-    }
-
-    if (!values.password) {
-      errors.password = 'Vui lòng nhập mật khẩu';
-    }
-
-    return errors;
-  };
+  // const validate = (values: UserAccount) => {
+  //   const errors: Partial<UserAccount> = {};
+  //
+  //   if (!values.email) {
+  //     errors.email = 'Vui lòng nhập email';
+  //   }
+  //
+  //   if (!values.password) {
+  //     errors.password = 'Vui lòng nhập mật khẩu';
+  //   }
+  //
+  //   return errors;
+  // };
 
   return (
       <div className="w-full h-screen flex justify-center items-center">
@@ -121,6 +140,7 @@ export function Register(): JSX.Element {
               validateOnChange
               validateOnBlur
               // validate={validate}
+              validationSchema={validate}
           >
             {({ handleSubmit, values, handleChange }): JSX.Element => {
               return (
@@ -139,7 +159,7 @@ export function Register(): JSX.Element {
                             className="input_login"
                             onPressEnter={(): void => handleSubmit()}
                         />
-                        <ErrorMessageGlobal name="username"/>
+                        <ErrorMessageGlobal name="username" classCustom='text-[14px]'/>
                       </div>
                       <div className="mb-[0.5rem] mt-[1rem]">
                         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
@@ -153,7 +173,7 @@ export function Register(): JSX.Element {
                             className="input_login"
                             onPressEnter={(): void => handleSubmit()}
                         />
-                        <ErrorMessageGlobal name="fullname"/>
+                        <ErrorMessageGlobal name="fullname" classCustom='text-[14px]'/>
                       </div>
                       <div className="mb-[0.5rem] mt-[1rem]">
                         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
@@ -167,7 +187,7 @@ export function Register(): JSX.Element {
                             className="input_login"
                             onPressEnter={(): void => handleSubmit()}
                         />
-                        <ErrorMessageGlobal name="email"/>
+                        <ErrorMessageGlobal name="email" classCustom='text-[14px]'/>
                       </div>
 
                       <div className="mb-[0.5rem]">
@@ -183,7 +203,7 @@ export function Register(): JSX.Element {
                             className="input_login"
                             onPressEnter={(): void => handleSubmit()}
                         />
-                        <ErrorMessageGlobal name="password"/>
+                        <ErrorMessageGlobal name="password" classCustom='text-[14px]'/>
                       </div>
                       <div className="mb-[0.5rem]">
                         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
@@ -198,7 +218,7 @@ export function Register(): JSX.Element {
                             className="input_login"
                             onPressEnter={(): void => handleSubmit()}
                         />
-                        <ErrorMessageGlobal name="confirm_password"/>
+                        <ErrorMessageGlobal name="confirm_password" classCustom='text-[14px]'/>
                       </div>
                       <ButtonGlobal
                           onClick={handleSubmit}
