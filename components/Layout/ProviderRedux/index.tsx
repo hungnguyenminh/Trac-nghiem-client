@@ -1,10 +1,10 @@
 'use client';
 
-import { Provider } from "react-redux";
-import store, { persistor } from "@/redux/store";
-import { PersistGate } from "redux-persist/integration/react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import Config from "@/config";
+import { Provider } from 'react-redux';
+import store, { persistor } from '@/redux/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import Config from '@/config';
 
 export function ProviderRedux({ children }: any) {
   const queryClient = new QueryClient({
@@ -15,7 +15,7 @@ export function ProviderRedux({ children }: any) {
       },
     },
   });
-  
+
   return (
     <div>
       <Provider store={store}>

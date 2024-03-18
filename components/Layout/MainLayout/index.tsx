@@ -9,8 +9,7 @@ import { CloseOutlined, MenuOutlined, SearchOutlined } from '@ant-design/icons';
 import { listRoutes } from '@/routes/listRoutes';
 import Link from 'next/link';
 import Footer from '@/components/Layout/Footer';
-import { useSelector } from "react-redux";
-
+import { useSelector } from 'react-redux';
 
 export default function MainLayout({
   children,
@@ -36,22 +35,21 @@ export default function MainLayout({
   //   }
   // }, []);
 
-
   const items: MenuProps['items'] = [
     {
       key: '1',
       label: (
-          <Link href="/profile/info">
-            <span>Trang cá nhân</span>
-          </Link>
+        <Link href="/profile/info">
+          <span>Trang cá nhân</span>
+        </Link>
       ),
     },
     {
       key: '2',
       label: (
-          <Link href="/login">
-            <span>{user?.user?.fullname ? 'Đăng xuất': 'Đăng nhập'}</span>
-          </Link>
+        <Link href="/login">
+          <span>{user?.user?.fullname ? 'Đăng xuất' : 'Đăng nhập'}</span>
+        </Link>
       ),
     },
   ];
@@ -89,7 +87,9 @@ export default function MainLayout({
             </div>
           </div>
           <div className="flex items-center pr-3 lg:pr-5">
-            <button className="mr-[0.2rem]">{user?.user?.fullname ?? 'Đăng Nhập'}</button>
+            <button className="mr-[0.2rem]">
+              {user?.user?.fullname ?? 'Đăng Nhập'}
+            </button>
             <Dropdown menu={{ items }} placement="bottomRight" arrow>
               <Avatar>U</Avatar>
             </Dropdown>
@@ -168,7 +168,7 @@ export default function MainLayout({
           }`}
         >
           {children}
-          <Footer />
+          {/* <Footer /> */}
         </div>
       </div>
     </main>

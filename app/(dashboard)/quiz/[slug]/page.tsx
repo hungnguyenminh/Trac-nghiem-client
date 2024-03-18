@@ -1,6 +1,6 @@
 import { Quiz } from '@/modules/quiz';
-import {postData} from "@/lib/post-data";
-import {map} from "lodash";
+import { postData } from '@/lib/post-data';
+import { map } from 'lodash';
 
 export async function generateStaticParams() {
   const paramApi: any = {

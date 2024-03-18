@@ -69,7 +69,7 @@ const path = {
   getUser: '/auth/get-user',
   login: '/auth/login',
   getAllUser: '/user',
-  register: '/auth/register'
+  register: '/auth/register',
 };
 
 function getAllUser(params: IParamsGetAllUser): Promise<IGetListUser> {

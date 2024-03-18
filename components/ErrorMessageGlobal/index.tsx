@@ -3,7 +3,7 @@ import './index.scss';
 
 interface ErrorMessageGlobalProps {
   name: string;
-  classCustom?: string
+  classCustom?: string;
 }
 
 function ErrorMessageGlobal(props: ErrorMessageGlobalProps): JSX.Element {

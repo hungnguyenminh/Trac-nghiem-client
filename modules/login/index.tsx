@@ -2,19 +2,19 @@
 
 import React from 'react';
 import './index.scss';
-import {Formik} from 'formik';
+import { Formik } from 'formik';
 
-import {useMutation} from 'react-query';
-import {Input, notification} from 'antd';
-import {UnlockOutlined, UserOutlined} from '@ant-design/icons';
+import { useMutation } from 'react-query';
+import { Input, notification } from 'antd';
+import { UnlockOutlined, UserOutlined } from '@ant-design/icons';
 import Image from 'next/image';
 
 import ErrorMessageGlobal from '@/components/ErrorMessageGlobal';
 import ApiUser from '@/api/ApiUser';
-import {ButtonGlobal} from '@/components/ButtonGlobal';
-import {loginUser} from "@/redux/slices/UserSlice";
-import {useDispatch} from "react-redux";
-import {useRouter} from "next/navigation";
+import { ButtonGlobal } from '@/components/ButtonGlobal';
+import { loginUser } from '@/redux/slices/UserSlice';
+import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/navigation';
 
 interface UserAccount {
   email: string;
@@ -65,8 +65,8 @@ export function Login(): JSX.Element {
   };
 
   const goToRegister = (): void => {
-    router.push('/register')
-  }
+    router.push('/register');
+  };
   const handleCheckRemember = (checked: boolean): void => {
     if (checked) {
       // dispatch(rememberAccount());
@@ -119,47 +119,56 @@ export function Login(): JSX.Element {
                     {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                     <label className="mb-[0.2rem]">Email</label>
                     <Input
-                        name="email"
-                        placeholder="email"
-                        value={values.email}
-                        onChange={handleChange}
-                        prefix={<UserOutlined/>}
-                        className="input_login"
-                        onPressEnter={(): void => handleSubmit()}
+                      name="email"
+                      placeholder="email"
+                      value={values.email}
+                      onChange={handleChange}
+                      prefix={<UserOutlined />}
+                      className="input_login"
+                      onPressEnter={(): void => handleSubmit()}
                     />
-                    <ErrorMessageGlobal name="email"/>
+                    <ErrorMessageGlobal name="email" />
                   </div>
 
                   <div className="mb-[0.5rem]">
                     {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                     <label className="mb-[0.2rem]">Password</label>
                     <Input
-                        name="password"
-                        type='password'
-                        placeholder="Password"
-                        value={values.password}
-                        onChange={handleChange}
-                        prefix={<UnlockOutlined/>}
-                        className="input_login"
-                        onPressEnter={(): void => handleSubmit()}
+                      name="password"
+                      type="password"
+                      placeholder="Password"
+                      value={values.password}
+                      onChange={handleChange}
+                      prefix={<UnlockOutlined />}
+                      className="input_login"
+                      onPressEnter={(): void => handleSubmit()}
                     />
-                    <ErrorMessageGlobal name="password"/>
+                    <ErrorMessageGlobal name="password" />
                   </div>
 
                   <div className="forgot-password-wrap">
-                    <div className="forgot-password_link cursor-pointer">Quên mật khẩu?</div>
+                    <div className="forgot-password_link cursor-pointer">
+                      Quên mật khẩu?
+                    </div>
                   </div>
 
                   <ButtonGlobal
-                      onClick={handleSubmit}
-                      className="btn-login"
-                      title="Đăng nhập"
-                      type="primary-filled"
-                      loading={login.isLoading}
+                    onClick={handleSubmit}
+                    className="btn-login"
+                    title="Đăng nhập"
+                    type="primary-filled"
+                    loading={login.isLoading}
                   />
                   <div className="forgot-password-wrap flex mt-[1rem] justify-center">
-                    <div className="forgot-password_link">Bạn chưa có tài khoản?</div>
-                    <div onClick={goToRegister} className="forgot-password_link cursor-pointer text-blue-600 font-bold ml-[0.5rem]">Đăng kí ngay</div>
+                    <div className="forgot-password_link">
+                      Bạn chưa có tài khoản?
+                    </div>
+                    <div
+                      onClick={goToRegister}
+                      className="forgot-password_link cursor-pointer text-blue-600 font-bold ml-[0.5rem]"
+                    >
+                      Đăng kí ngay
+                    </div>
                   </div>
                 </div>
               </div>

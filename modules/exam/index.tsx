@@ -8,26 +8,26 @@ import 'swiper/scss';
 import 'swiper/scss/pagination';
 
 import MyPagination from '../../components/Pagination';
-import { IGetAllQuestionRes } from "@/api/ApiQuestion";
-import { getAllExam } from "@/api/ApiExam";
-import { useQuery } from "react-query";
-import {postData} from "@/lib/post-data";
+import { IGetAllQuestionRes } from '@/api/ApiQuestion';
+import { getAllExam } from '@/api/ApiExam';
+import { useQuery } from 'react-query';
+import { postData } from '@/lib/post-data';
 
-interface Iprops{
-    listExam?: any
+interface Iprops {
+  listExam?: any;
 }
 
 export function Exam(props: Iprops) {
-  const {listExam} = props;
+  const { listExam } = props;
 
-    // const paramApi: any = {
-    //     url: `exam-question/get-all`,
-    //     method: 'get',
-    // };
-    //
-    // const listExam111=  postData(paramApi).then((res) => console.log('ress', res));
-    //
-    // console.log('listExam111', listExam111)
+  // const paramApi: any = {
+  //     url: `exam-question/get-all`,
+  //     method: 'get',
+  // };
+  //
+  // const listExam111=  postData(paramApi).then((res) => console.log('ress', res));
+  //
+  // console.log('listExam111', listExam111)
 
   const [activeIndex2, setActiveIndex2] = useState(0);
 
@@ -77,11 +77,12 @@ export function Exam(props: Iprops) {
               onSlideChange={handleSlideChange2}
               className="swiper-layout1"
             >
-              {listExam && listExam?.map((item: any, index: number) => (
-                <SwiperSlide key={index}>
-                  <ExamCard itemExam={item} />
-                </SwiperSlide>
-              ))}
+              {listExam &&
+                listExam?.map((item: any, index: number) => (
+                  <SwiperSlide key={index}>
+                    <ExamCard itemExam={item} />
+                  </SwiperSlide>
+                ))}
             </Swiper>
             <MyPagination numberOfSlide={5} activeIndex={activeIndex2} />
           </div>
@@ -123,10 +124,11 @@ export function Exam(props: Iprops) {
               onSlideChange={handleSlideChange2}
               className="swiper-layout1"
             >
-                {listExam && listExam?.map((item: any, index: number) => (
-                    <SwiperSlide key={index}>
-                        <ExamCard itemExam={item} />
-                    </SwiperSlide>
+              {listExam &&
+                listExam?.map((item: any, index: number) => (
+                  <SwiperSlide key={index}>
+                    <ExamCard itemExam={item} />
+                  </SwiperSlide>
                 ))}
             </Swiper>
             <MyPagination numberOfSlide={5} activeIndex={activeIndex2} />
@@ -169,10 +171,11 @@ export function Exam(props: Iprops) {
               onSlideChange={handleSlideChange2}
               className="swiper-layout1"
             >
-                {listExam && listExam?.map((item: any, index: number) => (
-                    <SwiperSlide key={index}>
-                        <ExamCard itemExam={item} />
-                    </SwiperSlide>
+              {listExam &&
+                listExam?.map((item: any, index: number) => (
+                  <SwiperSlide key={index}>
+                    <ExamCard itemExam={item} />
+                  </SwiperSlide>
                 ))}
             </Swiper>
             <MyPagination numberOfSlide={5} activeIndex={activeIndex2} />

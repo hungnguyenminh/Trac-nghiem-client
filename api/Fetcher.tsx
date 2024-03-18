@@ -114,7 +114,7 @@ export async function fetcher<T>(
     // },
     baseURL: Config.NETWORK_CONFIG.API_BASE_URL,
     timeout: Config.NETWORK_CONFIG.TIMEOUT,
-    mode: 'cors'
+    mode: 'cors',
   });
 
   // Access Token

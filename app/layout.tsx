@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import '../styles/globals.css';
-import { Provider } from "react-redux";
-import store from "@/redux/store";
-import { ProviderRedux } from "@/components/Layout/ProviderRedux";
+import { Provider } from 'react-redux';
+import store from '@/redux/store';
+import { ProviderRedux } from '@/components/Layout/ProviderRedux';
 
 export const metadata: Metadata = {
   title: 'Trac nghiem online',

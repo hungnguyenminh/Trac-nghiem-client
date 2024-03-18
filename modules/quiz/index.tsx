@@ -5,9 +5,10 @@ import { useRouter } from 'next/navigation';
 import { getDetailExam } from '@/api/ApiExam';
 import { useQuery } from 'react-query';
 import { Modal, Radio, RadioChangeEvent, Space } from 'antd';
-import { LoadingGlobal } from "@/components/LoadingGlobal";
-import { useBoolean } from "@/ultils/custom-hook";
-import { CheckCircleFilled, CloseCircleFilled } from "@ant-design/icons";
+import { LoadingGlobal } from '@/components/LoadingGlobal';
+import { useBoolean } from '@/ultils/custom-hook';
+import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
+import Image from 'next/image';
 
 interface IProps {
   idExam?: number;
@@ -45,6 +46,8 @@ export function Quiz(props: IProps) {
 
     return text;
   };
+
+  console.log('listQuestionSubmit', listQuestionSubmit);
 
   const isSelectedAll = (): boolean => {
     const findQuestionNotAnswer = listQuestionSubmit.filter(
@@ -160,77 +163,107 @@ export function Quiz(props: IProps) {
   return (
     <div className="m-6">
       <div className="lg:flex lg:justify-between mb-6">
-        <div className="w-[calc(100%-18rem)]">
-          {fetchDetailExam.isLoading ? (
-            <LoadingGlobal number={5} />
-          ) : (
-            listQuestionSubmit &&
-            listQuestionSubmit.map((item: any, index: number) => (
-              // eslint-disable-next-line react/jsx-key
-              <div className="card mb-6" key={index}>
-                <h4 className="mb-2">{`Câu ${index + 1}`}</h4>
-                <div>
-                  <fieldset>
-                    <legend>{item?.title_question}</legend>
-                    {statusExam === 'finished' && (
-                      <p className="mt-2">
-                        Giải thích: {item?.description_question}
-                      </p>
-                    )}
-                    <hr className="my-4" />
+        {statusExam === 'start' ? (
+          <div className="h-[30rem] w-[calc(100%-18rem)] flex flex-col items-center mt-[3rem]">
+            <Image alt="" src="/img/start-exam.jpg" width={600} height={600} />
+            <p className="font-semibold text-blue-600">
+              Bấm "BẮT ĐẦU BÀI THI" để làm bài
+            </p>
+          </div>
+        ) : (
+          <div className="w-[calc(100%-18rem)]">
+            {fetchDetailExam.isLoading ? (
+              <LoadingGlobal number={5} />
+            ) : (
+              listQuestionSubmit &&
+              listQuestionSubmit.map((item: any, index: number) => (
+                // eslint-disable-next-line react/jsx-key
+                <div className="card mb-6" key={index}>
+                  <h4 className="mb-2">{`Câu ${index + 1}`}</h4>
+                  <div>
+                    <fieldset>
+                      <legend>{item?.title_question}</legend>
+                      {statusExam === 'finished' && (
+                        <p className="mt-2">
+                          Giải thích: {item?.description_question}
+                        </p>
+                      )}
+                      <hr className="my-4" />
 
-                    <Radio.Group
-                      disabled={statusExam !== 'doing'}
-                      onChange={(e) => onChangeSelectAnswer(e, item)}
-                    >
-                      <Space direction="vertical">
-                        {item?.list_answer.map(
-                          (itemAnswer: any, index: number) => (
-                            <Radio key={index} value={index + 1}>
-                              <div className="flex items-center">
-                                {itemAnswer?.content}
+                      <Radio.Group
+                        disabled={statusExam !== 'doing'}
+                        onChange={(e) => onChangeSelectAnswer(e, item)}
+                      >
+                        <Space direction="vertical">
+                          {item?.list_answer.map(
+                            (itemAnswer: any, index: number) => (
+                              <Radio key={index} value={index + 1}>
+                                <div className="flex items-center">
+                                  {itemAnswer?.content}
 
-                                {statusExam === 'finished' && (
-                                  <div>
-                                    <div className="ml-2 text-red-700">
-                                      {item.is_selected === index + 1 &&
-                                        (itemAnswer?.is_correct ? (
-                                          <CheckCircleFilled
-                                            style={{
-                                              fontSize: 16,
-                                              color: "green",
-                                            }}
-                                          />
-                                        ) : (
-                                          <CloseCircleFilled
-                                            style={{ fontSize: 16 }}
-                                          />
-                                        ))}
+                                  {statusExam === 'finished' && (
+                                    <div>
+                                      {item.is_selected ? (
+                                        <div>
+                                          <div className="ml-2 text-red-700">
+                                            {item.is_selected === index + 1 &&
+                                              (itemAnswer?.is_correct ? (
+                                                <CheckCircleFilled
+                                                  style={{
+                                                    fontSize: 16,
+                                                    color: 'green',
+                                                  }}
+                                                />
+                                              ) : (
+                                                <CloseCircleFilled
+                                                  style={{ fontSize: 16 }}
+                                                />
+                                              ))}
 
-                                      {item.is_selected !== index + 1 &&
-                                        itemAnswer?.is_correct && (
-                                          <CheckCircleFilled
-                                            style={{
-                                              fontSize: 16,
-                                              color: "green",
-                                            }}
-                                          />
-                                        )}
+                                            {item.is_selected !== index + 1 &&
+                                              itemAnswer?.is_correct && (
+                                                <CheckCircleFilled
+                                                  style={{
+                                                    fontSize: 16,
+                                                    color: 'green',
+                                                  }}
+                                                />
+                                              )}
+                                          </div>
+                                        </div>
+                                      ) : (
+                                        <div>
+                                          <div className="ml-2 text-red-700">
+                                            {itemAnswer?.is_correct ? (
+                                              <CheckCircleFilled
+                                                style={{
+                                                  fontSize: 16,
+                                                  color: 'green',
+                                                }}
+                                              />
+                                            ) : (
+                                              <CloseCircleFilled
+                                                style={{ fontSize: 16 }}
+                                              />
+                                            )}
+                                          </div>
+                                        </div>
+                                      )}
                                     </div>
-                                  </div>
-                                )}
-                              </div>
-                            </Radio>
-                          )
-                        )}
-                      </Space>
-                    </Radio.Group>
-                  </fieldset>
+                                  )}
+                                </div>
+                              </Radio>
+                            )
+                          )}
+                        </Space>
+                      </Radio.Group>
+                    </fieldset>
+                  </div>
                 </div>
-              </div>
-            ))
-          )}
-        </div>
+              ))
+            )}
+          </div>
+        )}
 
         <div className="lg:fixed top-0 right-[2rem] z-20 flex-shrink-0  lg:pt-16 lg:w-[17rem] h-full duration-200 lg:flex transition-width">
           <div className="w-full lg:ml-6 h-fit p-6 rounded-lg bg-white mt-6 shadow-xl shadow-gray-200">
