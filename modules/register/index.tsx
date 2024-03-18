@@ -96,7 +96,7 @@ export function Register(): JSX.Element {
   };
 
   const goToRegister = (): void => {
-    router.push('/register');
+    router.push('/login');
   };
   const handleCheckRemember = (checked: boolean): void => {
     if (checked) {
@@ -123,8 +123,8 @@ export function Register(): JSX.Element {
   // };
 
   return (
-    <div className="w-full h-screen flex justify-center items-center">
-      <div className="h-[31rem] w-[31rem]">
+    <div className="w-full h-screen flex justify-center items-center max-md:flex-col max-md:justify-start max-md:mt-[6rem]">
+      <div className="h-[31rem] w-[31rem] max-md:hidden">
         <Image
           alt="banner"
           src="/img/banner.jpg"
@@ -145,9 +145,9 @@ export function Register(): JSX.Element {
           {({ handleSubmit, values, handleChange }): JSX.Element => {
             return (
               <div className="login-container">
-                <div className="login-container">
-                  <h1>WELCOME BACK</h1>
-                  <div className="mb-[0.5rem] mt-[1rem]">
+                <div className="login-container max-md:flex max-md:flex-col max-md:items-center max-md:px-[3.2rem]">
+                  <h1>REGISTER</h1>
+                  <div className="mb-[0.5rem] mt-[1rem] max-md:w-full">
                     {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                     <label className="mb-[0.2rem]">Username</label>
                     <Input
@@ -164,7 +164,7 @@ export function Register(): JSX.Element {
                       classCustom="text-[14px]"
                     />
                   </div>
-                  <div className="mb-[0.5rem] mt-[1rem]">
+                  <div className="mb-[0.5rem] mt-[1rem] max-md:w-full max-md:mt-0">
                     {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                     <label className="mb-[0.2rem]">Fullname</label>
                     <Input
@@ -181,7 +181,7 @@ export function Register(): JSX.Element {
                       classCustom="text-[14px]"
                     />
                   </div>
-                  <div className="mb-[0.5rem] mt-[1rem]">
+                  <div className="mb-[0.5rem] mt-[1rem] max-md:w-full max-md:mt-0">
                     {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                     <label className="mb-[0.2rem]">Email</label>
                     <Input
@@ -199,7 +199,7 @@ export function Register(): JSX.Element {
                     />
                   </div>
 
-                  <div className="mb-[0.5rem]">
+                  <div className="mb-[0.5rem] max-md:w-full">
                     {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                     <label className="mb-[0.2rem]">Password</label>
                     <Input
@@ -237,7 +237,7 @@ export function Register(): JSX.Element {
                   </div>
                   <ButtonGlobal
                     onClick={handleSubmit}
-                    className="btn-login mt-2"
+                    className="btn-login mt-2 max-md:w-[10rem]"
                     title="Đăng kí"
                     type="primary-filled"
                     loading={register.isLoading}

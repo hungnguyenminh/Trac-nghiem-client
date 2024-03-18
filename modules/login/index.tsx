@@ -92,8 +92,8 @@ export function Login(): JSX.Element {
   };
 
   return (
-    <div className="w-full h-screen flex justify-center items-center">
-      <div className="h-[31rem] w-[31rem]">
+    <div className="w-full h-screen flex justify-center items-center max-md:flex-col">
+      <div className="h-[31rem] w-[31rem] max-md:w-[23rem] max-md:h-[17rem]">
         <Image
           alt="banner"
           src="/img/banner.jpg"
@@ -113,9 +113,9 @@ export function Login(): JSX.Element {
           {({ handleSubmit, values, handleChange }): JSX.Element => {
             return (
               <div className="login-container">
-                <div className="login-container">
+                <div className="login-container max-md:flex max-md:flex-col max-md:items-center">
                   <h1>WELCOME BACK</h1>
-                  <div className="mb-[0.5rem] mt-[1rem]">
+                  <div className="mb-[0.5rem] mt-[1rem] max-md:w-full">
                     {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                     <label className="mb-[0.2rem]">Email</label>
                     <Input
@@ -154,7 +154,7 @@ export function Login(): JSX.Element {
 
                   <ButtonGlobal
                     onClick={handleSubmit}
-                    className="btn-login"
+                    className="btn-login max-md:mt-[1rem]"
                     title="Đăng nhập"
                     type="primary-filled"
                     loading={login.isLoading}

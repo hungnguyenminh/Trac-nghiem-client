@@ -164,14 +164,14 @@ export function Quiz(props: IProps) {
     <div className="m-6">
       <div className="lg:flex lg:justify-between mb-6">
         {statusExam === 'start' ? (
-          <div className="h-[30rem] w-[calc(100%-18rem)] flex flex-col items-center mt-[3rem]">
+          <div className="h-[30rem] w-[calc(100%-18rem)] flex flex-col items-center mt-[3rem] max-md:w-full max-md:h-fit">
             <Image alt="" src="/img/start-exam.jpg" width={600} height={600} />
-            <p className="font-semibold text-blue-600">
+            <p className="font-semibold text-blue-600 max-md:mt-[1rem]">
               Bấm "BẮT ĐẦU BÀI THI" để làm bài
             </p>
           </div>
         ) : (
-          <div className="w-[calc(100%-18rem)]">
+          <div className="w-[calc(100%-18rem)] max-md:w-full">
             {fetchDetailExam.isLoading ? (
               <LoadingGlobal number={5} />
             ) : (
