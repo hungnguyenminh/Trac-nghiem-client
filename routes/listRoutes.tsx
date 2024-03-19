@@ -25,6 +25,11 @@ const listRoutes: IRoute[] = [
     icon: <FileOutlined />,
   },
   {
+    path: '/subject',
+    label: 'Môn học',
+    icon: <FileOutlined />,
+  },
+  {
     path: '/docs',
     label: 'Tài liệu',
     icon: <FileWordOutlined />,

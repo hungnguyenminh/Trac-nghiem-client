@@ -28,7 +28,7 @@ interface IResponse {
   status: number;
 }
 
-function getAllSubject(): Promise<IListSubject> {
+function getAllSubject(): Promise<any> {
   return fetcher({
     url: path.getAllSubject,
     method: 'get',
