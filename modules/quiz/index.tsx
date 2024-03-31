@@ -9,6 +9,7 @@ import { LoadingGlobal } from '@/components/LoadingGlobal';
 import { useBoolean } from '@/ultils/custom-hook';
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import Image from 'next/image';
+import { forEach } from "lodash";
 
 interface IProps {
   idExam?: number;
@@ -27,7 +28,11 @@ export function Quiz(props: IProps) {
     second: 0,
   });
 
-  const [listQuestionSubmit, setListQuestionSubmit] = useState<any>();
+  const [listQuestionSubmit, setListQuestionSubmit] = useState<any>([]);
+  const [result, setResult] = useState({
+    total: 0,
+    totalCorrect: 0,
+  });
 
   const handleStatusExam = (): string => {
     let text = '';
@@ -126,6 +131,7 @@ export function Quiz(props: IProps) {
         return;
       }
       setStatusExam('finished');
+      checkNumberOfAnswerCorrect();
       return;
     }
     router.push('/');
@@ -135,6 +141,23 @@ export function Quiz(props: IProps) {
     //   'listQuestionSubmit',
     //   JSON.stringify(listQuestionSubmit)
     // );
+  };
+
+  const checkNumberOfAnswerCorrect = () => {
+    const total = listQuestionSubmit.length;
+    let totalCorrect = 0;
+
+    listQuestionSubmit.forEach((item) => {
+      const answerSelect = item?.is_selected;
+
+      const checkAnswer = item?.list_answer?.find(
+        (_, index: number) => answerSelect === index + 1
+      );
+
+      totalCorrect = checkAnswer?.is_correct ? totalCorrect++ : totalCorrect;
+    });
+
+    setResult({ total: total, totalCorrect: totalCorrect });
   };
 
   useEffect(() => {
@@ -271,7 +294,7 @@ export function Quiz(props: IProps) {
               Thời gian: {timeCowndown?.minute} phút {timeCowndown?.second} giây
             </div>
             <h4 className="mb-2">Mục lục câu hỏi</h4>
-            <div className="mb-4 flex flex-wrap lg:grid lg:grid-cols-5">
+            <div className="mb-2 flex flex-wrap lg:grid lg:grid-cols-5">
               {listQuestionSubmit &&
                 listQuestionSubmit.map((item: any, index: any) => (
                   // eslint-disable-next-line react/jsx-key
@@ -290,6 +313,17 @@ export function Quiz(props: IProps) {
                     </span>
                   </div>
                 ))}
+            </div>
+
+            <div className="mb-2">
+              {statusExam === 'finished' && (
+                <div className="w-full flex items-end text-orange-600 font-bold ">
+                  <div className="text-[1.1rem]">Kết quả:</div>
+                  <span className="ml-2 text-[1.3rem]">
+                    {result.totalCorrect}/{result.total}
+                  </span>
+                </div>
+              )}
             </div>
 
             <button
