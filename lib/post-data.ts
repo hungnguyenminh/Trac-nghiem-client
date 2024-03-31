@@ -4,7 +4,7 @@ import { IPostData } from '@/types/next-auth';
 // const revalidate = 0; // 1h
 const revalidate = Number(process.env.NEXT_PUBLIC_REVALIDATE) || 3600;
 const postData = async ({ url, method = 'post', body }: IPostData) => {
-  const res = await fetch(`https://yhoctracnghiem.top/api/${url}`, {
+  const res = await fetch(`http://127.0.0.1:8000/api/${url}`, {
     method: method,
     body: body,
     // mode: 'cors',
