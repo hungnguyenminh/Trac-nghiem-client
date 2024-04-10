@@ -146,11 +146,11 @@ export function Login(): JSX.Element {
                     <ErrorMessageGlobal name="password" />
                   </div>
 
-                  <div className="forgot-password-wrap">
-                    <div className="forgot-password_link cursor-pointer">
-                      Quên mật khẩu?
-                    </div>
-                  </div>
+                  {/* <div className="forgot-password-wrap"> */}
+                  {/*  <div className="forgot-password_link cursor-pointer"> */}
+                  {/*    Quên mật khẩu? */}
+                  {/*  </div> */}
+                  {/* </div> */}
 
                   <ButtonGlobal
                     onClick={handleSubmit}
